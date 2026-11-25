@@ -1,0 +1,4292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Analysis | المنصة التفاعلية — محاضرة المصطلحات الطبية (1)</title>
+<style>
+/* =========================================================
+   1. DESIGN & MOTION TOKENS
+   ========================================================= */
+:root {
+  /* Palette - Academic Medical Clean Light */
+  --bg-page: #f5f7fb;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #eef2f8;
+  --bg-glass: rgba(255, 255, 255, 0.82);
+  --border-color: #dde5f0;
+  --border-strong: #c2d0e4;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --brand-primary: #0f766e;
+  --brand-primary-hover: #0d9488;
+  --brand-secondary: #1d4ed8;
+  --brand-accent: #d97706;
+  --brand-soft: rgba(15, 118, 110, 0.10);
+  --brand-glow: rgba(15, 118, 110, 0.28);
+
+  --success: #15803d;
+  --success-bg: #dcfce7;
+  --error: #b91c1c;
+  --error-bg: #fee2e2;
+  --warning: #b45309;
+  --warning-bg: #fef3c7;
+
+  /* Term Highlight Categories */
+  --hl-prefix-bg: rgba(220, 38, 38, 0.12);
+  --hl-prefix-fg: #b91c1c;
+  --hl-root-bg: rgba(22, 163, 74, 0.12);
+  --hl-root-fg: #15803d;
+  --hl-suffix-bg: rgba(37, 99, 235, 0.12);
+  --hl-suffix-fg: #1d4ed8;
+  --hl-combining-bg: rgba(147, 51, 234, 0.12);
+  --hl-combining-fg: #7e22ce;
+  --hl-term-bg: rgba(15, 118, 110, 0.13);
+  --hl-term-fg: #0f766e;
+  --hl-dir-bg: rgba(217, 119, 6, 0.14);
+  --hl-dir-fg: #b45309;
+
+  /* Typography */
+  --font-ar: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-en: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-scale: 1;
+
+  /* Shadows & Depth */
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.14);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+
+  /* Motion Tokens */
+  --dur-instant: 140ms;
+  --dur-fast: 240ms;
+  --dur-med: 420ms;
+  --dur-cinematic: 620ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-w: 300px;
+  --topbar-h: 64px;
+}
+
+[data-theme="dark"] {
+  --bg-page: #0b1120;
+  --bg-surface: #111a2e;
+  --bg-elevated: #17233b;
+  --bg-subtle: #1b2842;
+  --bg-glass: rgba(17, 26, 46, 0.85);
+  --border-color: #253554;
+  --border-strong: #364b73;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  --brand-primary: #2dd4bf;
+  --brand-primary-hover: #5eead4;
+  --brand-secondary: #60a5fa;
+  --brand-accent: #fbbf24;
+  --brand-soft: rgba(45, 212, 191, 0.14);
+  --brand-glow: rgba(45, 212, 191, 0.32);
+
+  --success: #4ade80;
+  --success-bg: rgba(22, 163, 74, 0.2);
+  --error: #f87171;
+  --error-bg: rgba(220, 38, 38, 0.2);
+  --warning: #fbbf24;
+  --warning-bg: rgba(217, 119, 6, 0.2);
+
+  --hl-prefix-bg: rgba(248, 113, 113, 0.18);
+  --hl-prefix-fg: #fca5a5;
+  --hl-root-bg: rgba(74, 222, 128, 0.16);
+  --hl-root-fg: #86efac;
+  --hl-suffix-bg: rgba(96, 165, 250, 0.18);
+  --hl-suffix-fg: #93c5fd;
+  --hl-combining-bg: rgba(192, 132, 252, 0.18);
+  --hl-combining-fg: #d8b4fe;
+  --hl-term-bg: rgba(45, 212, 191, 0.18);
+  --hl-term-fg: #5eead4;
+  --hl-dir-bg: rgba(251, 191, 36, 0.18);
+  --hl-dir-fg: #fde68a;
+
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* =========================================================
+   2. RESET & BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  font-size: calc(16px * var(--font-scale));
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  font-family: var(--font-ar);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.75;
+  overflow-x: hidden;
+  transition: background var(--dur-med) var(--ease-smooth), color var(--dur-med) var(--ease-smooth);
+}
+button, input, select {
+  font-family: inherit;
+  color: inherit;
+}
+button { cursor: pointer; }
+:focus-visible {
+  outline: 2.5px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   3. AMBIENT MOTION BACKGROUND
+   ========================================================= */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.22;
+  will-change: transform;
+  animation: orbFloat 22s ease-in-out infinite alternate;
+}
+.ambient-orb.orb-1 {
+  width: 420px; height: 420px;
+  top: -120px; right: -80px;
+  background: radial-gradient(circle, var(--brand-primary), transparent 70%);
+}
+.ambient-orb.orb-2 {
+  width: 360px; height: 360px;
+  bottom: -100px; left: -60px;
+  background: radial-gradient(circle, var(--brand-secondary), transparent 70%);
+  animation-delay: -8s;
+  animation-duration: 28s;
+}
+.ambient-orb.orb-3 {
+  width: 280px; height: 280px;
+  top: 45%; left: 38%;
+  background: radial-gradient(circle, var(--brand-accent), transparent 70%);
+  opacity: 0.11;
+  animation-delay: -14s;
+  animation-duration: 32s;
+}
+@keyframes orbFloat {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(30px, -25px, 0) scale(1.08); }
+  100% { transform: translate3d(-25px, 30px, 0) scale(0.95); }
+}
+
+/* =========================================================
+   4. CINEMATIC INTRO OVERLAY
+   ========================================================= */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 30% 25%, #113a40 0%, #0b1120 72%);
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 550ms var(--ease-out-expo), transform 550ms var(--ease-out-expo);
+}
+.intro-overlay.hidden {
+  opacity: 0;
+  transform: scale(1.06);
+  pointer-events: none;
+}
+.intro-card {
+  max-width: 580px;
+  text-align: center;
+  animation: introRise 750ms var(--ease-out-expo) both;
+}
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.16);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  color: #5eead4;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.intro-title {
+  font-size: clamp(1.75rem, 4.5vw, 2.7rem);
+  font-weight: 800;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  font-family: var(--font-en);
+}
+.intro-sub {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  margin: 0 0 26px;
+}
+.intro-puzzle-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  direction: ltr;
+}
+.intro-piece {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 0.95rem;
+  opacity: 0;
+  transform: translateY(18px) scale(0.9);
+  animation: pieceSnap 550ms var(--ease-spring) forwards;
+}
+.intro-piece:nth-child(1) { background: rgba(248,113,113,0.22); color: #fca5a5; border: 1px solid rgba(248,113,113,0.4); animation-delay: 180ms; }
+.intro-piece:nth-child(2) { background: rgba(74,222,128,0.22); color: #86efac; border: 1px solid rgba(74,222,128,0.4); animation-delay: 320ms; }
+.intro-piece:nth-child(3) { background: rgba(192,132,252,0.22); color: #d8b4fe; border: 1px solid rgba(192,132,252,0.4); animation-delay: 460ms; }
+.intro-piece:nth-child(4) { background: rgba(96,165,250,0.22); color: #93c5fd; border: 1px solid rgba(96,165,250,0.4); animation-delay: 600ms; }
+@keyframes introRise {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pieceSnap {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* =========================================================
+   5. SCROLL PROGRESS & TOPBAR
+   ========================================================= */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 3.5px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--brand-secondary), var(--brand-primary), var(--brand-accent));
+  z-index: 1200;
+  transition: width 80ms linear;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: var(--topbar-h);
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  gap: 12px;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brand-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-family: var(--font-en);
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px var(--brand-glow);
+}
+.brand-meta {
+  min-width: 0;
+}
+.brand-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   6. BUTTON MOTION LABORATORY
+   ========================================================= */
+.btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast) var(--ease-smooth), background var(--dur-fast), border-color var(--dur-fast);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--brand-primary);
+}
+.btn:active {
+  transform: scale(0.95) translateY(0);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-primary), #0d9488);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px var(--brand-glow);
+}
+.btn-primary:hover {
+  box-shadow: 0 10px 24px var(--brand-glow);
+  filter: brightness(1.05);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
+  transform: skewX(-20deg);
+  transition: left 550ms var(--ease-out-expo);
+}
+.btn-primary:hover::after { left: 160%; }
+
+.btn-secondary {
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+  border-color: transparent;
+}
+.btn-secondary:hover {
+  background: var(--brand-primary);
+  color: #fff;
+}
+.btn-danger {
+  background: var(--error-bg);
+  color: var(--error);
+  border-color: transparent;
+}
+.btn-danger:hover {
+  background: var(--error);
+  color: #fff;
+}
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 11px;
+}
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+.btn.active-toggle {
+  background: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+}
+
+/* Ripple Effect */
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0);
+  animation: rippleExpand 520ms var(--ease-out-expo);
+  pointer-events: none;
+}
+[data-theme="light"] .btn:not(.btn-primary) .ripple-circle {
+  background: rgba(15, 118, 110, 0.18);
+}
+@keyframes rippleExpand {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* Hamburger Morph Icon */
+.menu-icon svg line {
+  transition: transform var(--dur-fast) var(--ease-spring), opacity var(--dur-fast);
+  transform-origin: center;
+}
+.menu-icon.open .l1 { transform: translateY(6px) rotate(45deg); }
+.menu-icon.open .l2 { opacity: 0; }
+.menu-icon.open .l3 { transform: translateY(-6px) rotate(-45deg); }
+
+/* SVG Stroke Checkmark */
+.svg-check path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: drawCheck 380ms var(--ease-out-expo) forwards;
+}
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Error Shake */
+.shake-error {
+  animation: shakeX 360ms var(--ease-smooth);
+}
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  45% { transform: translateX(6px); }
+  70% { transform: translateX(-4px); }
+  85% { transform: translateX(3px); }
+}
+
+/* =========================================================
+   7. APP LAYOUT & SIDEBAR
+   ========================================================= */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: calc(100vh - var(--topbar-h));
+}
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  height: calc(100vh - var(--topbar-h));
+  position: sticky;
+  top: var(--topbar-h);
+  overflow-y: auto;
+  padding: 18px 14px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform var(--dur-med) var(--ease-out-expo), width var(--dur-med) var(--ease-out-expo), opacity var(--dur-fast);
+}
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 940;
+}
+.sidebar-section-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 0 10px;
+  margin-bottom: 6px;
+}
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-item-btn {
+  width: 100%;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all var(--dur-fast) var(--ease-out-expo);
+}
+.nav-item-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  transform: translateX(-3px);
+}
+.nav-item-btn.active {
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+  border-color: rgba(15, 118, 110, 0.25);
+  font-weight: 700;
+}
+.nav-badge {
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.nav-item-btn.active .nav-badge {
+  background: var(--brand-primary);
+  color: #fff;
+}
+.nav-done-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+
+/* Progress Card inside Sidebar */
+.progress-box {
+  background: var(--bg-subtle);
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+}
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.progress-track {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-secondary), var(--brand-primary));
+  transition: width 500ms var(--ease-out-expo);
+}
+
+/* Main Content */
+.main-stage {
+  flex: 1;
+  min-width: 0;
+  padding: 26px clamp(16px, 3vw, 40px) 72px;
+  max-width: 1120px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Focus Mode & Reading Mode */
+body.focus-mode .sidebar { display: none; }
+body.focus-mode .main-stage { max-width: 860px; }
+body.reading-mode .secondary-ui { display: none !important; }
+body.reading-mode .paragraph-card { box-shadow: none; border-color: var(--border-color); }
+
+/* =========================================================
+   8. CINEMATIC VIEW TRANSITIONS
+   ========================================================= */
+.view-container {
+  perspective: 1200px;
+}
+.anim-depth-zoom {
+  animation: depthZoomIn var(--dur-cinematic) var(--ease-out-expo) both;
+}
+@keyframes depthZoomIn {
+  from { opacity: 0; transform: scale(0.95) translateZ(-40px); }
+  to { opacity: 1; transform: scale(1) translateZ(0); }
+}
+.anim-directional-wipe {
+  animation: directionalWipeIn var(--dur-med) var(--ease-out-expo) both;
+}
+@keyframes directionalWipeIn {
+  from { opacity: 0; transform: translateX(-28px); clip-path: inset(0 0 0 12%); }
+  to { opacity: 1; transform: translateX(0); clip-path: inset(0 0 0 0); }
+}
+.anim-blur-focus {
+  animation: blurFocusIn var(--dur-med) var(--ease-out-expo) both;
+}
+@keyframes blurFocusIn {
+  from { opacity: 0; filter: blur(8px); transform: translateY(14px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+.anim-perspective-tunnel {
+  animation: tunnelIn var(--dur-cinematic) var(--ease-out-expo) both;
+}
+@keyframes tunnelIn {
+  from { opacity: 0; transform: perspective(900px) rotateX(4deg) translateY(24px) scale(0.96); }
+  to { opacity: 1; transform: perspective(900px) rotateX(0) translateY(0) scale(1); }
+}
+.anim-circular-reveal {
+  animation: circularRevealIn var(--dur-cinematic) var(--ease-out-expo) both;
+}
+@keyframes circularRevealIn {
+  from { opacity: 0; clip-path: circle(12% at 50% 25%); }
+  to { opacity: 1; clip-path: circle(130% at 50% 25%); }
+}
+
+/* Scroll Reveal */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 520ms var(--ease-out-expo), transform 520ms var(--ease-out-expo);
+}
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   9. HERO / HOME DASHBOARD
+   ========================================================= */
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f2937 0%, #0f4c5c 52%, #134e4a 100%);
+  color: #f8fafc;
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 4vw, 42px);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 26px;
+}
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(45, 212, 191, 0.25), transparent 45%),
+              radial-gradient(circle at 85% 80%, rgba(96, 165, 250, 0.22), transparent 50%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-uni {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #99f6e4;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.hero-title-en {
+  font-family: var(--font-en);
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  margin: 0 0 6px;
+  line-height: 1.2;
+  direction: ltr;
+  text-align: right;
+}
+.hero-title-ar {
+  font-size: 1.12rem;
+  color: #e2e8f0;
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+.hero-meta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.meta-pill {
+  background: rgba(15, 23, 42, 0.38);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 13px;
+  border-radius: 10px;
+  font-size: 0.83rem;
+  color: #f1f5f9;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.hero-actions .btn:not(.btn-primary) {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+}
+.hero-actions .btn:not(.btn-primary):hover {
+  background: rgba(255,255,255,0.22);
+}
+
+/* Stats & Units Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast);
+}
+.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.stat-num {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--brand-primary);
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+.unit-preview-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transform-style: preserve-3d;
+  transition: transform var(--dur-fast) var(--ease-out-expo), box-shadow var(--dur-fast), border-color var(--dur-fast);
+}
+.unit-preview-card:hover {
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-md);
+}
+.unit-num-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+}
+.unit-card-title {
+  font-size: 1.04rem;
+  font-weight: 800;
+  margin: 8px 0 4px;
+}
+.unit-card-en {
+  font-family: var(--font-en);
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  direction: ltr;
+  text-align: right;
+  margin: 0;
+}
+
+/* =========================================================
+   10. UNIT HEADER & PARAGRAPH CARDS
+   ========================================================= */
+.unit-header {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.unit-header-title {
+  margin: 6px 0 4px;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+}
+.unit-header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.paragraph-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.paragraph-card.search-hit {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
+}
+.para-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-color);
+}
+.para-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.page-pill {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+}
+.para-heading {
+  font-size: 1.03rem;
+  font-weight: 800;
+  margin: 0;
+}
+.para-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Original English Content (LTR) */
+.original-box {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-en);
+  background: var(--bg-subtle);
+  border-radius: 12px;
+  padding: 16px 18px;
+  border-left: 4px solid var(--brand-primary);
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+.original-box ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+.original-box li { margin-bottom: 6px; }
+.original-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-primary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Interactive Clickable Words & Highlighted Terms */
+.w-tok {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0 1.5px;
+  transition: background 140ms, color 140ms;
+}
+.w-tok:hover {
+  background: rgba(15, 118, 110, 0.14);
+  color: var(--brand-primary);
+}
+.hl-term {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border-bottom: 2px solid currentColor;
+  display: inline-block;
+  line-height: 1.45;
+  transition: transform 150ms var(--ease-spring), filter 150ms;
+}
+.hl-term:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.hl-prefix { background: var(--hl-prefix-bg); color: var(--hl-prefix-fg); }
+.hl-root { background: var(--hl-root-bg); color: var(--hl-root-fg); }
+.hl-suffix { background: var(--hl-suffix-bg); color: var(--hl-suffix-fg); }
+.hl-combining { background: var(--hl-combining-bg); color: var(--hl-combining-fg); }
+.hl-medical { background: var(--hl-term-bg); color: var(--hl-term-fg); }
+.hl-directional { background: var(--hl-dir-bg); color: var(--hl-dir-fg); }
+
+/* Arabic Translation Box */
+.translation-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 340ms var(--ease-out-expo), opacity 280ms ease, margin-top 340ms var(--ease-out-expo);
+}
+.translation-wrapper.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 14px;
+}
+.translation-inner { overflow: hidden; }
+.translation-box {
+  direction: rtl;
+  text-align: right;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--brand-secondary);
+  border-radius: 12px;
+  padding: 15px 18px;
+  font-size: 0.96rem;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+.translation-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--brand-secondary);
+  margin-bottom: 6px;
+  display: block;
+}
+.source-note {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Academic Tables inside Paragraphs */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+.acad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-en);
+}
+.acad-table th {
+  background: var(--brand-primary);
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.acad-table td {
+  padding: 9px 14px;
+  border-top: 1px solid var(--border-color);
+  vertical-align: top;
+}
+.acad-table tr:nth-child(even) td { background: var(--bg-subtle); }
+.acad-table td.ar-col {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-ar);
+  color: var(--text-secondary);
+}
+
+/* Visual Diagrams (SVG) */
+.diagram-card {
+  margin-top: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+.diagram-card svg { max-width: 100%; height: auto; }
+.diagram-caption {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Word Dissection Interactive Strip */
+.dissection-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  direction: ltr;
+}
+.dissection-row {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.d-chip {
+  padding: 6px 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: var(--font-en);
+}
+.d-chip strong { display: block; font-size: 0.96rem; }
+.d-chip small { display: block; font-size: 0.74rem; opacity: 0.9; }
+.d-plus { font-weight: 800; color: var(--text-muted); }
+
+/* =========================================================
+   11. PER-PARAGRAPH & FULL MCQ ENGINE
+   ========================================================= */
+.mcq-drawer {
+  margin-top: 16px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 18px;
+  animation: blurFocusIn 320ms var(--ease-out-expo) both;
+}
+.mcq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.mcq-q-text {
+  font-family: var(--font-en);
+  direction: ltr;
+  text-align: left;
+  font-size: 1.02rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.mcq-q-ar {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0 0 14px;
+}
+.mcq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mcq-opt {
+  width: 100%;
+  text-align: left;
+  direction: ltr;
+  font-family: var(--font-en);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-surface);
+  font-size: 0.93rem;
+  font-weight: 600;
+  transition: transform 180ms var(--ease-spring), border-color 180ms, background 180ms;
+}
+.mcq-opt:hover:not(:disabled) {
+  border-color: var(--brand-primary);
+  transform: translateX(4px);
+}
+.mcq-opt:disabled { cursor: default; }
+.mcq-opt.correct {
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+.mcq-opt.wrong {
+  background: var(--error-bg);
+  border-color: var(--error);
+  color: var(--error);
+}
+.mcq-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  animation: blurFocusIn 260ms var(--ease-out-expo);
+}
+.mcq-feedback.ok { background: var(--success-bg); color: var(--success); }
+.mcq-feedback.bad { background: var(--error-bg); color: var(--error); }
+.mcq-footer {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* =========================================================
+   12. WORD TRANSLATION POPOVER
+   ========================================================= */
+.word-popover {
+  position: fixed;
+  z-index: 2000;
+  width: min(330px, calc(100vw - 24px));
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  animation: popDepth 240ms var(--ease-spring) both;
+}
+.word-popover.visible { display: block; }
+@keyframes popDepth {
+  from { opacity: 0; transform: scale(0.9) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.pop-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pop-word {
+  font-family: var(--font-en);
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--brand-primary);
+  direction: ltr;
+}
+.pop-cat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+  display: inline-block;
+  margin-top: 2px;
+}
+.pop-ar {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 4px 0 6px;
+}
+.pop-ctx {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+.pop-ex {
+  font-size: 0.8rem;
+  background: var(--bg-subtle);
+  padding: 7px 10px;
+  border-radius: 8px;
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-en);
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+/* =========================================================
+   13. GLOSSARY, SEARCH, REVIEW, FLASHCARDS & MODALS
+   ========================================================= */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.search-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-surface);
+  font-size: 0.92rem;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 14px;
+}
+.gloss-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  transition: transform var(--dur-fast) var(--ease-spring), border-color var(--dur-fast);
+}
+.gloss-card:hover { transform: translateY(-3px); border-color: var(--brand-primary); }
+
+/* 3D Flip Flashcards in Final Review */
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.flip-card {
+  perspective: 900px;
+  height: 155px;
+  cursor: pointer;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 520ms var(--ease-spring);
+}
+.flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.flip-back {
+  transform: rotateY(180deg);
+  background: var(--brand-soft);
+  border-color: var(--brand-primary);
+}
+
+/* Modals (Settings, Search, Reset Confirm) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.modal-backdrop.open { display: flex; }
+.modal-box {
+  width: min(560px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-lg);
+  animation: depthZoomIn 280ms var(--ease-out-expo);
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  gap: 12px;
+}
+.search-result-item {
+  width: 100%;
+  text-align: right;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: block;
+  transition: border-color var(--dur-fast), transform var(--dur-fast);
+}
+.search-result-item:hover {
+  border-color: var(--brand-primary);
+  transform: translateX(-3px);
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 22px;
+  left: 22px;
+  z-index: 3000;
+  background: var(--text-primary);
+  color: var(--bg-page);
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 240ms, transform 240ms var(--ease-spring);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Particle Burst */
+.particle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3200;
+  animation: particleFly 680ms var(--ease-out-expo) forwards;
+}
+@keyframes particleFly {
+  to { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+/* Unit Bottom Navigation */
+.unit-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* =========================================================
+   14. RESPONSIVE & REDUCED MOTION
+   ========================================================= */
+.mobile-menu-btn { display: none; }
+@media (max-width: 960px) {
+  .mobile-menu-btn { display: inline-flex; }
+  .sidebar {
+    position: fixed;
+    top: var(--topbar-h);
+    right: 0;
+    z-index: 950;
+    transform: translateX(105%);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .sidebar-backdrop.mobile-open { display: block; }
+  .brand-sub { display: none; }
+}
+@media (max-width: 600px) {
+  .topbar { padding: 0 12px; }
+  .paragraph-card { padding: 16px; }
+  .hero-card { padding: 20px; }
+  .hide-xs { display: none; }
+}
+
+/* Respect prefers-reduced-motion & manual toggle */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ambient-orb { display: none; }
+}
+html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+html[data-motion="reduced"] .ambient-orb { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Ambient Motion Background -->
+<div class="ambient-bg" aria-hidden="true">
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+</div>
+
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- Short Skippable Cinematic Intro -->
+<div class="intro-overlay" id="introOverlay" role="dialog" aria-label="مقدمة المحاضرة">
+  <div class="intro-card">
+    <div class="intro-badge">جامعة البصرة • كلية طب الزهراء • المحاضرة 1</div>
+    <h1 class="intro-title">Medical Terminology: Word Analysis</h1>
+    <p class="intro-sub">منصة الدراسة التفاعلية المتكاملة لتحليل المصطلحات الطبية كقطع الأحجية (Jigsaw Puzzles)</p>
+    <div class="intro-puzzle-row" aria-hidden="true">
+      <span class="intro-piece">Prefix</span>
+      <span class="intro-piece">Word Root</span>
+      <span class="intro-piece">/ O /</span>
+      <span class="intro-piece">Suffix</span>
+    </div>
+    <button class="btn btn-primary" id="enterPlatformBtn" style="padding:12px 28px;font-size:1rem;">
+      ابدأ رحلة الدراسة الآن
+    </button>
+  </div>
+</div>
+
+<!-- Sticky Top Bar -->
+<header class="topbar">
+  <div class="topbar-right">
+    <button class="btn btn-icon mobile-menu-btn menu-icon" id="mobileMenuBtn" aria-label="القائمة الجانبية">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line class="l1" x1="4" y1="6" x2="20" y2="6"></line>
+        <line class="l2" x1="4" y1="12" x2="20" y2="12"></line>
+        <line class="l3" x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+    </button>
+    <div class="brand-chip" id="brandHomeBtn" style="cursor:pointer;" title="العودة للرئيسية">
+      <div class="brand-logo">MT</div>
+      <div class="brand-meta">
+        <p class="brand-title">Word Analysis — Lecture 1</p>
+        <p class="brand-sub">كلية طب الزهراء • جامعة البصرة • أ.د. عبير لفتة محمد</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar-actions">
+    <button class="btn btn-sm" id="openSearchBtn" title="بحث في المحاضرة">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="hide-xs">بحث</span>
+    </button>
+    <button class="btn btn-sm" id="toggleFocusBtn" title="وضع التركيز">
+      <span class="hide-xs">تركيز</span>
+    </button>
+    <button class="btn btn-sm" id="toggleReadingBtn" title="وضع القراءة">
+      <span class="hide-xs">قراءة</span>
+    </button>
+    <button class="btn btn-icon" id="toggleThemeBtn" title="الوضع الليلي / النهاري" aria-label="تبديل المظهر">
+      <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="btn btn-icon" id="openSettingsBtn" title="إعدادات العرض" aria-label="إعدادات العرض">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="app-shell">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar" aria-label="التنقل بين وحدات المحاضرة">
+    <div class="progress-box">
+      <div class="progress-row">
+        <span>تقدمك في المحاضرة</span>
+        <span id="sidebarProgressPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="sidebarProgressBar"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-label">الأقسام الرئيسية</div>
+      <ul class="nav-list" id="mainNavList">
+        <li><button class="nav-item-btn active" data-view="home"><span>🏠 الرئيسية والنظرة العامة</span></button></li>
+        <li><button class="nav-item-btn" data-view="glossary"><span>📖 قاموس المصطلحات (Glossary)</span><span class="nav-badge" id="glossCountBadge">0</span></button></li>
+        <li><button class="nav-item-btn" data-view="favorites"><span>⭐ المصطلحات المحفوظة</span><span class="nav-badge" id="favCountBadge">0</span></button></li>
+        <li><button class="nav-item-btn" data-view="review"><span>🧠 المراجعة النهائية</span></button></li>
+        <li><button class="nav-item-btn" data-view="exam"><span>📝 الاختبار الشامل</span></button></li>
+        <li><button class="nav-item-btn" data-view="mistakes"><span>🎯 مراجعة الأخطاء</span><span class="nav-badge" id="mistakesCountBadge">0</span></button></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="sidebar-section-label">وحدات المحاضرة (39 صفحة)</div>
+      <ul class="nav-list" id="unitsNavList"></ul>
+    </div>
+  </aside>
+
+  <!-- Main Dynamic Stage -->
+  <main class="main-stage">
+    <div class="view-container" id="viewContainer"></div>
+  </main>
+</div>
+
+<!-- Word Click-to-Translate Popover -->
+<div class="word-popover" id="wordPopover" role="dialog" aria-label="ترجمة الكلمة">
+  <div class="pop-head">
+    <div>
+      <div class="pop-word" id="popWord"></div>
+      <span class="pop-cat" id="popCat"></span>
+    </div>
+    <button class="btn btn-icon btn-sm" id="closePopoverBtn" aria-label="إغلاق">✕</button>
+  </div>
+  <div class="pop-ar" id="popAr"></div>
+  <p class="pop-ctx" id="popCtx"></p>
+  <div class="pop-ex" id="popEx"></div>
+  <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;">
+    <button class="btn btn-secondary btn-sm" id="popFavBtn">⭐ حفظ في المفضلة</button>
+    <span style="font-size:0.72rem;color:var(--text-muted);">قاموس محلي (Offline)</span>
+  </div>
+</div>
+
+<!-- Search Modal -->
+<div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-label="البحث في المحتوى">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="margin:0;">🔍 البحث داخل المحاضرة</h3>
+      <button class="btn btn-icon btn-sm" data-close-modal="searchModal">✕</button>
+    </div>
+    <input type="search" class="search-input" id="globalSearchInput" placeholder="ابحث عن مصطلح، بادئة، جذر، لاحقة، أو فقرة (مثل: Gastro أو inflammation)..." style="width:100%;margin-bottom:14px;">
+    <div id="globalSearchResults"></div>
+  </div>
+</div>
+
+<!-- Display Settings Modal -->
+<div class="modal-backdrop" id="settingsModal" role="dialog" aria-modal="true" aria-label="إعدادات العرض">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 style="margin:0;">⚙️ إعدادات العرض والدراسة</h3>
+      <button class="btn btn-icon btn-sm" data-close-modal="settingsModal">✕</button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <strong>حجم الخط</strong>
+        <div style="font-size:0.82rem;color:var(--text-muted);">تكبير أو تصغير النصوص لتسهيل القراءة</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-sm" id="fontDecBtn">A-</button>
+        <button class="btn btn-sm" id="fontResetBtn">A</button>
+        <button class="btn btn-sm" id="fontIncBtn">A+</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <div>
+        <strong>تقليل الحركة (Reduced Motion)</strong>
+        <div style="font-size:0.82rem;color:var(--text-muted);">إيقاف الحركات السينمائية والخلفيات المتحركة</div>
+      </div>
+      <button class="btn btn-sm" id="toggleMotionBtn">مفعّل</button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <strong>إعادة عرض المقدمة السينمائية</strong>
+        <div style="font-size:0.82rem;color:var(--text-muted);">مشاهدة مقدمة المحاضرة مرة أخرى</div>
+      </div>
+      <button class="btn btn-sm" id="replayIntroBtn">عرض</button>
+    </div>
+    <div class="setting-row" style="border-bottom:none;">
+      <div>
+        <strong style="color:var(--error);">إعادة ضبط التقدم بالكامل</strong>
+        <div style="font-size:0.82rem;color:var(--text-muted);">مسح الوحدات المكتملة، المفضلة، والأخطاء المحفوظة</div>
+      </div>
+      <button class="btn btn-danger btn-sm" id="openResetConfirmBtn">إعادة ضبط</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div class="modal-backdrop" id="resetModal" role="dialog" aria-modal="true" aria-label="تأكيد إعادة الضبط">
+  <div class="modal-box" style="max-width:420px;text-align:center;">
+    <h3 style="margin-top:0;color:var(--error);">تأكيد مسح التقدم</h3>
+    <p style="color:var(--text-secondary);">هل أنت متأكد من مسح تقدمك الدراسي، نتائج الاختبارات، وقائمة المفضلة؟ لا يمكن التراجع عن هذا الإجراء.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:18px;">
+      <button class="btn" data-close-modal="resetModal">إلغاء</button>
+      <button class="btn btn-danger" id="confirmResetBtn">نعم، امسح التقدم</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================================
+   1. COMPLETE LECTURE DATA (EXTRACTED FROM ALL 39 PAGES OF L 1 word analysis.pdf)
+   ========================================================================= */
+const LECTURE_META = {
+  institution: "University of Basrah — Al-Zahraa Medical College",
+  institutionAr: "جامعة البصرة — كلية طب الزهراء (وزارة التعليم العالي والبحث العلمي)",
+  course: "Medical Terminology",
+  courseAr: "المصطلحات الطبية",
+  semester: "Semester 1",
+  lectureNum: "Lecture 1",
+  title: "Word Analysis",
+  titleAr: "تحليل الكلمات والمصطلحات الطبية",
+  lecturer: "Prof. Dr. Abeer L. Mohammed",
+  lecturerAr: "أ.د. عبير لفتة محمد",
+  pages: 39,
+  reference: "Medical Terminology: A Short Course, 8th Edition by Davi-Ellen Chabner, Imprint: Saunders Elsevier, 2018. Online training quizzes: EVOLVE.ELSEVIER.COM"
+};
+
+/* Highlighted Key Terms Dictionary & Local Word-Click Dictionary (100% Offline) */
+const DICTIONARY = {
+  // Core Concepts
+  "terminology": { ar: "المصطلحات", cat: "medical", catAr: "مصطلح أساسي", ctx: "اللغة العلمية المستخدمة لوصف جسم الإنسان وحالاته بدقة.", ex: "Medical Terminology" },
+  "prefix": { ar: "بادئة", cat: "prefix", catAr: "بادئة (Prefix)", ctx: "مقطع يُضاف في بداية الكلمة أو الجذر لتغيير المعنى أو إنشاء كلمة جديدة.", ex: "Post- in Postoperative" },
+  "prefixes": { ar: "البادئات", cat: "prefix", catAr: "بادئة (Prefix)", ctx: "مقاطع توضع في بداية الجذر وتدل على الزمن أو الموقع أو النفي أو القياس أو العدد.", ex: "Pre-, Post-, Sub-, Dys-" },
+  "root": { ar: "جذر الكلمة", cat: "root", catAr: "جذر (Word Root)", ctx: "الجزء الأساسي والجوهر الذي يحمل المعنى الرئيسي للمصطلح الطبي (عضو أو لون).", ex: "Cardi (heart), Cyan (blue)" },
+  "roots": { ar: "الجذور", cat: "root", catAr: "جذر (Word Root)", ctx: "الأساس الرئيسي للمصطلح الطبي؛ كل مصطلح طبي يحتوي على جذر واحد على الأقل.", ex: "Oste/o/arthr/itis (2 roots)" },
+  "suffix": { ar: "لاحقة", cat: "suffix", catAr: "لاحقة (Suffix)", ctx: "مقطع يُضاف إلى نهاية الجذر أو صيغة الربط لتعديل المعنى (إجراء، حالة، اضطراب، أو مرض).", ex: "-itis, -ectomy, -logy" },
+  "suffixes": { ar: "اللواحق", cat: "suffix", catAr: "لاحقة (Suffix)", ctx: "نهايات الكلمات الطبية التي تحدد الحالة أو الإجراء الطبي.", ex: "-algia, -megaly, -scope" },
+  "combining": { ar: "الربط / صيغة الربط", cat: "combining", catAr: "صيغة ربط", ctx: "جذر الكلمة مضافاً إليه حرف علة للربط (غالباً o) لتسهيل النطق.", ex: "cyst/o, therm/o" },
+  "vowel": { ar: "حرف علة", cat: "combining", catAr: "حرف ربط", ctx: "حرف الربط (عادةً o) الذي يصل الجذر بلاحقة تبدأ بحرف ساكن أو بجذر آخر.", ex: "HEMAT / O / LOGY" },
+  "consonant": { ar: "حرف ساكن", cat: "combining", catAr: "قاعدة ربط", ctx: "عندما تبدأ اللاحقة بحرف ساكن نستخدم حرف الربط (o).", ex: "gastr/o/scope" },
+  "jigsaw": { ar: "أحجية التركيب (بزل)", cat: "medical", catAr: "تشبيه تعليمي", ctx: "تشبيه المصطلحات الطبية بقطع الأحجية التي تتركب معاً لتكوين معنى فريد.", ex: "Prefix + Combining Form + Suffix" },
+
+  // Prefixes (Slides 8-10, 32-35)
+  "pre": { ar: "قبل", cat: "prefix", catAr: "بادئة زمنية", ctx: "تدل على الحدوث قبل شيء معين (عكس Post-).", ex: "Preoperative" },
+  "post": { ar: "بعد", cat: "prefix", catAr: "بادئة زمنية", ctx: "تدل على الحدوث بعد شيء معين.", ex: "Postoperative (after surgery)" },
+  "postoperative": { ar: "ما بعد العملية الجراحية", cat: "medical", catAr: "مصطلح طبي", ctx: "الفترة أو الحالة التي تلي إجراء العملية الجراحية (Post + operative).", ex: "Postoperative care" },
+  "pro": { ar: "قبل / للأمام", cat: "prefix", catAr: "بادئة زمنية", ctx: "تدل على التقدم أو المعرفة المسبقة.", ex: "Prognosis" },
+  "prognosis": { ar: "التنبؤ بسير المرض", cat: "medical", catAr: "مصطلح طبي", ctx: "توقع طبي مسبق لمسار المرض (before knowledge).", ex: "Prognosis is a prediction" },
+  "exo": { ar: "خارج", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الخارج (أصلها يوناني، عكس endo-).", ex: "Exocrine glands" },
+  "ecto": { ar: "خارج", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الخارج (أصلها يوناني).", ex: "Ectopic" },
+  "exocrine": { ar: "خارجي الإفراز", cat: "medical", catAr: "مصطلح طبي", ctx: "غدد تفرز موادها إلى الخارج عبر قنوات.", ex: "Exocrine glands" },
+  "endo": { ar: "داخل", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الداخل (أصلها يوناني، تقابل Intra- اللاتينية).", ex: "Endocrine glands, Endoscopy" },
+  "endocrine": { ar: "صمّاء / داخلي الإفراز", cat: "medical", catAr: "مصطلح طبي", ctx: "غدد تفرز هرموناتها مباشرة داخل مجرى الدم.", ex: "Endocrine glands" },
+  "endoscopy": { ar: "تنظير داخلي", cat: "medical", catAr: "إجراء طبي", ctx: "عملية فحص الأعضاء الداخلية بالمنظار.", ex: "Endo- (within) + scopy" },
+  "sub": { ar: "تحت / أسفل", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الموقع أسفل عضو ما (أصلها لاتيني، عكس Epi-).", ex: "Subgastric, Subhepatic, Subcutaneous" },
+  "subgastric": { ar: "تحت المعدة", cat: "medical", catAr: "مصطلح طبي", ctx: "موقع تشريحي يقع أسفل المعدة.", ex: "Sub (under) + gastric (stomach)" },
+  "subhepatic": { ar: "تحت الكبد", cat: "medical", catAr: "مصطلح طبي", ctx: "يقع أسفل الكبد.", ex: "Sub- + hepatic" },
+  "subcutaneous": { ar: "تحت الجلد", cat: "medical", catAr: "مصطلح طبي", ctx: "أسفل طبقة الجلد.", ex: "Sub- (underneath) + cutaneous" },
+  "epi": { ar: "فوق / على", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الموقع فوق أو أعلى شيء (عكس Sub-).", ex: "Epigastric" },
+  "intra": { ar: "داخل / ضمن", cat: "prefix", catAr: "بادئة مكانية", ctx: "داخل الشيء (لاتينية، عكس extra-).", ex: "Intracellular" },
+  "intracellular": { ar: "داخل الخلية", cat: "medical", catAr: "مصطلح طبي", ctx: "يحدث أو يوجد داخل الخلية الواحدة.", ex: "Intra- (within) + cellular" },
+  "extra": { ar: "خارج", cat: "prefix", catAr: "بادئة مكانية", ctx: "خارج الشيء (لاتينية، عكس Intra-).", ex: "Extracellular" },
+  "retro": { ar: "خلف", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الموقع خلف عضو ما (وردت في شريحة 8 بصيغة Rerto خطأً مطبعياً).", ex: "Retrogastric" },
+  "retrogastric": { ar: "خلف المعدة", cat: "medical", catAr: "مصطلح طبي", ctx: "يقع خلف المعدة.", ex: "Retro- (behind) + gastric" },
+  "inter": { ar: "بين", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الموقع بين عنصرين أو أكثر.", ex: "Intervertebral, Intercellular" },
+  "intervertebral": { ar: "بين الفقرات", cat: "medical", catAr: "مصطلح طبي", ctx: "يقع بين فقرات العمود الفقري.", ex: "Intervertebral disc" },
+  "intercellular": { ar: "بين الخلايا", cat: "medical", catAr: "مصطلح طبي", ctx: "يقع بين الخلايا وبعضها.", ex: "Inter- (between) + cellular" },
+  "peri": { ar: "محيط بـ", cat: "prefix", catAr: "بادئة مكانية", ctx: "تدل على الإحاطة بالعضو.", ex: "Pericardium" },
+  "pericardium": { ar: "التامور (غشاء القلب المحيط)", cat: "medical", catAr: "مصطلح طبي", ctx: "الغشاء المحيط بالقلب.", ex: "Peri- (surrounding) + cardium" },
+  "apnea": { ar: "انقطاع التنفس", cat: "medical", catAr: "مصطلح طبي", ctx: "توقف التنفس (A- بدون + pnea تنفس).", ex: "Apnea (no breathing)" },
+  "anemia": { ar: "فقر الدم", cat: "medical", catAr: "مصطلح طبي", ctx: "نقص في كريات الدم الحمراء أو الهيموغلوبين (An- بدون + emia دم).", ex: "An- (without) + emia" },
+  "dehydration": { ar: "الجفاف", cat: "medical", catAr: "مصطلح طبي", ctx: "فقدان أو إزالة الماء من الجسم (De- إزالة).", ex: "De- (remove) + hydration" },
+  "abnormal": { ar: "غير طبيعي", cat: "medical", catAr: "مصطلح طبي", ctx: "بعيد عن الحالة الطبيعية (ab- بعيداً عن).", ex: "ab- (away from) + normal" },
+  "antibody": { ar: "جسم مضاد", cat: "medical", catAr: "مصطلح طبي", ctx: "بروتين مناعي يعمل ضد الأجسام الغريبة (anti- ضد).", ex: "anti- (against) + body" },
+  "dyspnea": { ar: "ضيق أو صعوبة التنفس", cat: "medical", catAr: "مصطلح طبي", ctx: "تنفس صعب أو مؤلم أو غير طبيعي (Dys- صعب/سيء).", ex: "Dys- + pnea" },
+  "dysentery": { ar: "الزحار (الدوسنتاريا)", cat: "medical", catAr: "مصطلح طبي", ctx: "اضطراب معوي مؤلم وصعب (Dys- مؤلم/سيء + enter أمعاء).", ex: "Dys- + entery" },
+  "micro": { ar: "صغير جداً", cat: "prefix", catAr: "بادئة قياس", ctx: "تدل على الصغر (عكس macro-).", ex: "Microscopic" },
+  "macro": { ar: "كبير", cat: "prefix", catAr: "بادئة قياس", ctx: "تدل على الكبر (عكس micro-).", ex: "Macromolecule" },
+  "macromolecule": { ar: "جزيء ضخم / كبير", cat: "medical", catAr: "مصطلح علمي", ctx: "جزيء كبير الحجم.", ex: "macro- (large) + molecule" },
+  "hyper": { ar: "مفرط / أعلى من الطبيعي", cat: "prefix", catAr: "بادئة قياس", ctx: "زيادة مفرطة عن المعدل الطبيعي (عكس Hypo-).", ex: "Hyperglycemia, Hyperthyroidism" },
+  "hypo": { ar: "منخفض / أقل من الطبيعي / تحت", cat: "prefix", catAr: "بادئة قياس/مكان", ctx: "أقل من المعدل الطبيعي (أو أسفل باليونانية مقابل Sub-).", ex: "Hypoglycemia, Hypoglossal" },
+  "hyperglycemia": { ar: "ارتفاع سكر الدم", cat: "medical", catAr: "مصطلح طبي", ctx: "زيادة مفرطة في مستوى السكر بالدم.", ex: "Hyper- + glyc + emia" },
+  "hypoglycemia": { ar: "انخفاض سكر الدم", cat: "medical", catAr: "مصطلح طبي", ctx: "انخفاض مستوى السكر بالدم عن الطبيعي.", ex: "Hypo- + glyc + emia" },
+  "hypoglossal": { ar: "تحت اللسان", cat: "medical", catAr: "مصطلح طبي", ctx: "يقع أسفل اللسان (Hypo- تحت + gloss لسان).", ex: "Hypoglossal nerve" },
+  "brady": { ar: "بطيء", cat: "prefix", catAr: "بادئة قياس", ctx: "تدل على البطء (عكس Tachy-).", ex: "Bradycardia" },
+  "tachy": { ar: "سريع", cat: "prefix", catAr: "بادئة قياس", ctx: "تدل على السرعة (عكس brady-).", ex: "Tachycardia" },
+  "bradycardia": { ar: "بطء ضربات القلب", cat: "medical", catAr: "مصطلح طبي", ctx: "انخفاض معدل نبض القلب عن الطبيعي.", ex: "brady- (slow) + cardia (heart)" },
+  "poly": { ar: "كثير / متعدد", cat: "prefix", catAr: "بادئة قياس", ctx: "تدل على الكثرة والتعدد.", ex: "Polyuria" },
+  "polyuria": { ar: "كثرة التبول", cat: "medical", catAr: "مصطلح طبي", ctx: "إفراز كميات كبيرة من البول.", ex: "poly- (many/much) + uria" },
+  "monosaccharide": { ar: "سكر أحادي", cat: "medical", catAr: "مصطلح علمي", ctx: "وحدة سكر واحدة (Mono- واحد).", ex: "Mono- (one) + saccharide" },
+  "quadriplegia": { ar: "شلل رباعي", cat: "medical", catAr: "مصطلح طبي", ctx: "شلل الأطراف الأربعة (Quadri- أربعة + -plegia شلل).", ex: "Quadri- (four) + plegia (paralysis)" },
+  "autopsy": { ar: "تشريح الجثة", cat: "medical", catAr: "مصطلح طبي", ctx: "الفحص الذاتي/المباشر للجثة (Aut- ذاتي + -opsy مشاهدة).", ex: "Aut- (self) + opsy (to view)" },
+  "diagnosis": { ar: "التشخيص", cat: "medical", catAr: "مصطلح طبي", ctx: "المعرفة الكاملة بالمرض عبر الفحص (Dia- كامل/عبر).", ex: "Dia- (complete/through) + gnosis" },
+  "resection": { ar: "استئصال جزئي / قطع", cat: "medical", catAr: "إجراء طبي", ctx: "إزالة جزء من عضو جراحياً (Re- للخلف/إعادة).", ex: "Re- (back) + section" },
+  "transdermal": { ar: "عبر الجلد", cat: "medical", catAr: "مصطلح طبي", ctx: "يمر عبر طبقات الجلد (Trans- عبر).", ex: "Trans- (across/through) + dermal" },
+
+  // Roots (Slides 11-13, 22-27)
+  "cardial": { ar: "قلبي", cat: "root", catAr: "مثال جذر", ctx: "متعلق بالقلب (جذر cardi = قلب).", ex: "cardial – heart" },
+  "cyanosis": { ar: "ازرقاق", cat: "root", catAr: "مثال جذر لوني", ctx: "حالة ازرقاق (جذر cyan = أزرق).", ex: "cyanosis – blue (color)" },
+  "sclera": { ar: "صلبة العين (بياض العين)", cat: "root", catAr: "جذر واحد", ctx: "بياض العين؛ مثال لمصطلح طبي يتكون من جذر واحد فقط.", ex: "sclera – white of the eye" },
+  "osteoarthritis": { ar: "التهاب العظم والمفصل", cat: "medical", catAr: "مصطلح مركب", ctx: "يتكون من جذرين ولاحقة: Oste (عظم) + o + arthr (مفصل) + itis (التهاب).", ex: "Oste/o/arthr/itis" },
+  "gyne": { ar: "امرأة", cat: "root", catAr: "جذر طبي", ctx: "جذر يعني امرأة (مثل Gynecology).", ex: "Gyne mean woman" },
+  "dent": { ar: "سن", cat: "root", catAr: "جذر طبي", ctx: "جذر يعني سن.", ex: "Dent mean tooth / Denticle" },
+  "lingua": { ar: "لسان", cat: "root", catAr: "جذر طبي", ctx: "جذر يعني لسان.", ex: "Lingua mean tongue" },
+  "hysterectomy": { ar: "استئصال الرحم", cat: "medical", catAr: "إجراء طبي", ctx: "استخدام الجذر اليوناني hyster للرحم مع لاحقة ectomy.", ex: "hyster- (Greek: uterus)" },
+  "uterus": { ar: "الرحم", cat: "root", catAr: "جذر لاتيني", ctx: "الاسم اللاتيني للرحم (جذر uter-).", ex: "uterine / uterus" },
+  "nephrotomy": { ar: "شق الكلية", cat: "medical", catAr: "إجراء طبي", ctx: "شق جراحي في الكلية باستخدام الجذر اليوناني nephr-.", ex: "nephr- (Greek: kidney)" },
+  "renal": { ar: "كلوي", cat: "medical", catAr: "مصطلح طبي", ctx: "متعلق بالكلية باستخدام الجذر اللاتيني ren-.", ex: "renal kidney" },
+  "adeno": { ar: "غدة", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني غدة.", ex: "adenoma, adenitis" },
+  "adenoma": { ar: "ورم غدي", cat: "medical", catAr: "مصطلح طبي", ctx: "ورم في الغدة (adeno + oma).", ex: "Adeno (gland) + oma (tumor)" },
+  "adenitis": { ar: "التهاب الغدة", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب يصيب الغدة (adeno + itis).", ex: "Adeno (gland) + itis" },
+  "arthro": { ar: "مفصل", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني مفصل.", ex: "arthritis, arthrogram" },
+  "arthritis": { ar: "التهاب المفاصل", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب المفصل (حُذف حرف o لأن اللاحقة itis تبدأ بحرف علة).", ex: "arthr/itis" },
+  "bio": { ar: "حياة", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني حياة.", ex: "biology, biopsy" },
+  "biology": { ar: "علم الأحياء", cat: "medical", catAr: "مصطلح علمي", ctx: "دراسة الحياة.", ex: "bio + logy" },
+  "carcino": { ar: "سرطان", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني سرطان.", ex: "carcinoma" },
+  "carcinoma": { ar: "ورم سرطاني", cat: "medical", catAr: "مصطلح طبي", ctx: "ورم خبيث (سرطان).", ex: "carcino + oma" },
+  "cardio": { ar: "قلب", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني قلب.", ex: "cardiology" },
+  "cardiology": { ar: "علم أمراض القلب", cat: "medical", catAr: "مصطلح طبي", ctx: "دراسة القلب وأمراضه.", ex: "cardi/o/logy" },
+  "cephalo": { ar: "رأس", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني رأس.", ex: "cephalic, cephalgia" },
+  "cephalic": { ar: "رأسي / متعلق بالرأس", cat: "medical", catAr: "مصطلح طبي", ctx: "متعلق بالرأس.", ex: "cephal + ic" },
+  "cerebro": { ar: "المخ", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني المخ (cerebrum).", ex: "cerebral" },
+  "cerebral": { ar: "مخي / متعلق بالمخ", cat: "medical", catAr: "مصطلح طبي", ctx: "متعلق بالمخ.", ex: "cerebr + al" },
+  "cysto": { ar: "المثانة البولية / كيس", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني المثانة البولية (urinary bladder).", ex: "cystoscope, cyst/o" },
+  "cystoscope": { ar: "منظار المثانة", cat: "medical", catAr: "أداة طبية", ctx: "أداة لفحص المثانة البولية بصرياً.", ex: "cyst/o/scope" },
+  "cyto": { ar: "خلية", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني خلية.", ex: "cytology" },
+  "cytology": { ar: "علم الخلايا", cat: "medical", catAr: "مصطلح طبي", ctx: "دراسة الخلايا.", ex: "cyt/o/logy" },
+  "dermato": { ar: "جلد", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني جلد.", ex: "dermatitis (وردت dermititis في الشريحة)" },
+  "electro": { ar: "كهرباء", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني كهرباء.", ex: "electrocardiogram" },
+  "electrocardiogram": { ar: "تخطيط كهربائية القلب", cat: "medical", catAr: "فحص طبي", ctx: "تسجيل للنشاط الكهربائي للقلب.", ex: "electro + cardio + gram" },
+  "encephalo": { ar: "الدماغ", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني الدماغ (brain).", ex: "electroencephalogram" },
+  "electroencephalogram": { ar: "تخطيط كهربائية الدماغ", cat: "medical", catAr: "فحص طبي", ctx: "تسجيل للنشاط الكهربائي للدماغ.", ex: "electro + encephalo + gram" },
+  "entero": { ar: "الأمعاء", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني الأمعاء (intestines).", ex: "enteritis, gastroenterology" },
+  "enteritis": { ar: "التهاب الأمعاء", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب يصيب الأمعاء.", ex: "ENTER / itis" },
+  "erythro": { ar: "أحمر", cat: "root", catAr: "جذر لوني", ctx: "جذر يعني اللون الأحمر.", ex: "erythrocyte" },
+  "erythrocyte": { ar: "خلية دم حمراء", cat: "medical", catAr: "مصطلح طبي", ctx: "خلية حمراء (erythro أحمر + cyte خلية).", ex: "erythr/o/cyte" },
+  "gastro": { ar: "المعدة", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني المعدة (stomach).", ex: "gastroscopy, gastroscope, gastroenterology" },
+  "gastroscopy": { ar: "تنظير المعدة", cat: "medical", catAr: "إجراء طبي", ctx: "عملية فحص المعدة بالمنظار.", ex: "gastr/o/scopy" },
+  "gastroscope": { ar: "منظار المعدة", cat: "medical", catAr: "أداة طبية", ctx: "أداة لفحص المعدة بصرياً.", ex: "GASTR/O/SCOPE" },
+  "gastroenterology": { ar: "علم أمراض المعدة والأمعاء", cat: "medical", catAr: "مصطلح مركب", ctx: "دراسة المعدة والأمعاء (جذران + حرفا ربط + لاحقة).", ex: "GASTR/O/ENTER/O/LOGY" },
+  "hemato": { ar: "الدم", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني الدم (blood).", ex: "hematology, hematoma" },
+  "hematology": { ar: "علم أمراض الدم", cat: "medical", catAr: "مصطلح طبي", ctx: "دراسة الدم (HEMAT + O + LOGY).", ex: "HEMAT/O/LOGY" },
+  "hematoma": { ar: "ورم دموي", cat: "medical", catAr: "مصطلح طبي", ctx: "تجمع أو كتلة دموية.", ex: "hemat + oma" },
+  "hepato": { ar: "الكبد", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني الكبد (liver).", ex: "hepatitis, hepatoma, hepatomegaly" },
+  "hepatitis": { ar: "التهاب الكبد", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب يصيب الكبد.", ex: "hepat + itis" },
+  "laparo": { ar: "البطن", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني البطن (abdomen).", ex: "laparotomy" },
+  "laparotomy": { ar: "شق البطن الجراحي", cat: "medical", catAr: "إجراء طبي", ctx: "فتح أو شق جراحي في جدار البطن.", ex: "lapar/o/tomy" },
+  "leuko": { ar: "أبيض", cat: "root", catAr: "جذر لوني", ctx: "جذر يعني اللون الأبيض.", ex: "leukocyte, leukemia" },
+  "leukocyte": { ar: "خلية دم بيضاء", cat: "medical", catAr: "مصطلح طبي", ctx: "خلية بيضاء (leuko أبيض + cyte خلية).", ex: "leuk/o/cyte" },
+  "nephro": { ar: "الكلية", cat: "root", catAr: "جذر يوناني", ctx: "جذر يوناني يعني الكلية.", ex: "nephrectomy, nephrology, nephrosis" },
+  "nephrectomy": { ar: "استئصال الكلية", cat: "medical", catAr: "إجراء طبي", ctx: "إزالة الكلية جراحياً.", ex: "nephr + ectomy" },
+  "neuro": { ar: "عصب", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني عصب (nerve).", ex: "neurology, neurologist, neurogenesis" },
+  "neurology": { ar: "علم الأعصاب", cat: "medical", catAr: "مصطلح طبي", ctx: "دراسة الأعصاب والجهاز العصبي.", ex: "neur/o/logy" },
+  "onco": { ar: "ورم", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني ورم (tumor).", ex: "oncologist" },
+  "oncologist": { ar: "أخصائي الأورام", cat: "medical", catAr: "مصطلح طبي", ctx: "طبيب مختص في الأورام.", ex: "onc/o/logist" },
+  "ophthalmo": { ar: "العين", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني العين (eye).", ex: "ophthalmoscope" },
+  "ophthalmoscope": { ar: "منظار العين", cat: "medical", catAr: "أداة طبية", ctx: "أداة لفحص العين.", ex: "ophthalm/o/scope" },
+  "osteo": { ar: "العظم", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني العظم (bone).", ex: "osteoarthritis, osteodynia" },
+  "patho": { ar: "مرض", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني مرض (disease).", ex: "pathologist" },
+  "pathologist": { ar: "أخصائي علم الأمراض", cat: "medical", catAr: "مصطلح طبي", ctx: "مختص في دراسة الأمراض.", ex: "path/o/logist" },
+  "psycho": { ar: "العقل / النفس", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني العقل (mind).", ex: "psychosis" },
+  "psychosis": { ar: "الذُهان (حالة عقلية غير طبيعية)", cat: "medical", catAr: "مصطلح طبي", ctx: "حالة عقلية غير طبيعية.", ex: "psych + osis" },
+  "reno": { ar: "الكلية", cat: "root", catAr: "جذر لاتيني", ctx: "جذر لاتيني يعني الكلية.", ex: "renal" },
+  "rhino": { ar: "الأنف", cat: "root", catAr: "جذر شائع", ctx: "جذر يعني الأنف (nose).", ex: "rhinitis, rhinorrhea" },
+  "rhinitis": { ar: "التهاب الأنف", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب بطانة الأنف.", ex: "rhin + itis" },
+
+  // Suffixes & Their Examples (Slides 15-16, 28-31)
+  "itis": { ar: "التهاب", cat: "suffix", catAr: "لاحقة عرض/مرض", ctx: "تدل على الالتهاب (Inflammation).", ex: "Arthritis, Gastroenteritis, Gingivitis" },
+  "paresis": { ar: "ضعف / شلل جزئي", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على الضعف (Weakness).", ex: "Hemiparesis" },
+  "hemiparesis": { ar: "ضعف نصفي (في أحد جانبي الجسم)", cat: "medical", catAr: "مصطلح طبي", ctx: "ضعف في نصف الجسم.", ex: "Hemi + paresis" },
+  "plegia": { ar: "شلل", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على الشلل (Paralysis).", ex: "Quadriplegia" },
+  "rrhea": { ar: "إفراز / سيلان / تدفق", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على التدفق أو السيلان (Discharge/Flow).", ex: "Rhinorrhea" },
+  "rhinorrhea": { ar: "سيلان الأنف", cat: "medical", catAr: "مصطلح طبي", ctx: "إفراز أو سيلان من الأنف.", ex: "Rhino + rrhea" },
+  "edema": { ar: "تورم / وذمة", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على التورم (Swelling).", ex: "Blepharedema" },
+  "blepharedema": { ar: "تورم الجفن", cat: "medical", catAr: "مصطلح طبي", ctx: "تورم يصيب جفن العين.", ex: "Blephar + edema" },
+  "odynia": { ar: "ألم / انزعاج", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على الألم أو الانزعاج (Pain/Discomfort).", ex: "Osteodynia" },
+  "osteodynia": { ar: "ألم العظام", cat: "medical", catAr: "مصطلح طبي", ctx: "ألم في العظم.", ex: "Oste + odynia" },
+  "spasm": { ar: "تقلص عضلي / تشنج", cat: "suffix", catAr: "لاحقة عرض", ctx: "تقلص عضلي لا إرادي (Muscle Contraction).", ex: "Vasospasm" },
+  "vasospasm": { ar: "تشنج وعائي", cat: "medical", catAr: "مصطلح طبي", ctx: "تقلص في الأوعية الدموية.", ex: "Vaso + spasm" },
+  "hemorrhage": { ar: "نزيف شديد", cat: "medical", catAr: "مصطلح طبي", ctx: "تدفق مفرط للدم (-rrhage = Excessive Flow/Discharge).", ex: "Hemo + rrhage" },
+  "algia": { ar: "ألم", cat: "suffix", catAr: "لاحقة عرض", ctx: "تدل على الألم (Pain).", ex: "Cephalgia, Arthralgia" },
+  "cephalgia": { ar: "صداع (ألم الرأس)", cat: "medical", catAr: "مصطلح طبي", ctx: "ألم في الرأس.", ex: "Cephal + algia" },
+  "arthralgia": { ar: "ألم المفاصل", cat: "medical", catAr: "مصطلح طبي", ctx: "ألم يصيب المفصل.", ex: "Arthr + algia" },
+  "megaly": { ar: "تضخم", cat: "suffix", catAr: "لاحقة وصفية", ctx: "تدل على التضخم (Enlargement).", ex: "Hepatomegaly" },
+  "hepatomegaly": { ar: "تضخم الكبد", cat: "medical", catAr: "مصطلح طبي", ctx: "زيادة غير طبيعية في حجم الكبد.", ex: "Hepato + megaly" },
+  "denticle": { ar: "سُنين (سن صغير جداً)", cat: "medical", catAr: "مصطلح طبي", ctx: "بنية سنية صغيرة أو مجهرية (-icle = Small/Microscopic).", ex: "Dent + icle" },
+  "vasoconstriction": { ar: "تضيق الأوعية الدموية", cat: "medical", catAr: "مصطلح طبي", ctx: "تضيق أو انقباض الوعاء الدموي (-constriction = Narrow/Contract).", ex: "Vaso + constriction" },
+  "vasodilation": { ar: "توسع الأوعية الدموية", cat: "medical", catAr: "مصطلح طبي", ctx: "توسع الوعاء الدموي (-dilation = Expand/Widen).", ex: "Vaso + dilation" },
+  "aneurysm": { ar: "تمدد الأوعية الدموية", cat: "medical", catAr: "مصطلح طبي", ctx: "توسع غير طبيعي في جدار الوعاء الدموي (-eurysm = Expand/Widen).", ex: "An + eurysm" },
+  "neurogenesis": { ar: "تكون الخلايا العصبية", cat: "medical", catAr: "مصطلح طبي", ctx: "إنتاج وتطور الخلايا العصبية (-genesis = Development/Production).", ex: "Neuro + genesis" },
+  "hemostasis": { ar: "إرقاء / إيقاف النزيف", cat: "medical", catAr: "مصطلح طبي", ctx: "السيطرة على النزيف وإيقافه (-stasis = Control/Stop).", ex: "Hemo + stasis" },
+  "ectomy": { ar: "استئصال جراحي / قطع وإزالة", cat: "suffix", catAr: "لاحقة جراحية", ctx: "cutting out, excision, surgical removal.", ex: "Gastrectomy, Thromboectomy" },
+  "gastrectomy": { ar: "استئصال المعدة", cat: "medical", catAr: "إجراء طبي", ctx: "إزالة المعدة أو جزء منها جراحياً.", ex: "gastr/ectomy" },
+  "thromboectomy": { ar: "استئصال الخثرة الدموية", cat: "medical", catAr: "إجراء طبي", ctx: "إزالة جلطة دموية جراحياً.", ex: "thrombo + ectomy" },
+  "leukemia": { ar: "ابيضاض الدم (لوكيميا)", cat: "medical", catAr: "مصطلح طبي", ctx: "حالة دموية غير طبيعية (-emia = blood condition).", ex: "leuk + emia" },
+  "hemoglobin": { ar: "هيموغلوبين", cat: "medical", catAr: "مصطلح طبي", ctx: "بروتين الدم (-globin = protein).", ex: "hemo + globin" },
+  "arthrogram": { ar: "صورة/سجل المفصل", cat: "medical", catAr: "فحص طبي", ctx: "سجل أو تصوير للمفصل (-gram = record).", ex: "arthr/o/gram" },
+  "hyperthyroidism": { ar: "فرط نشاط الغدة الدرقية", cat: "medical", catAr: "مصطلح طبي", ctx: "حالة فرط نشاط الغدة الدرقية (-ism = condition, process).", ex: "hyper + thyroid + ism" },
+  "gastroenteritis": { ar: "التهاب المعدة والأمعاء", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب يصيب المعدة والأمعاء معاً.", ex: "gastr/o/enter/itis" },
+  "gingivitis": { ar: "التهاب اللثة", cat: "medical", catAr: "مصطلح طبي", ctx: "التهاب يصيب اللثة.", ex: "gingiv + itis" },
+  "neurologist": { ar: "أخصائي الأعصاب", cat: "medical", catAr: "مصطلح طبي", ctx: "مختص في دراسة وعلاج الأعصاب (-logist = specialist).", ex: "neur/o/logist" },
+  "nephrology": { ar: "علم أمراض الكلى", cat: "medical", catAr: "مصطلح طبي", ctx: "دراسة الكلى (-logy = study of).", ex: "nephr/o/logy" },
+  "hepatoma": { ar: "ورم الكبد", cat: "medical", catAr: "مصطلح طبي", ctx: "ورم أو كتلة في الكبد (-oma = tumor, mass).", ex: "hepat + oma" },
+  "biopsy": { ar: "خزعة (فحص نسيج حي)", cat: "medical", catAr: "إجراء طبي", ctx: "أخذ عينة لمشاهدتها وفحصها (-opsy = to view).", ex: "bi + opsy" },
+  "nephrosis": { ar: "اعتلال كلوي (حالة غير طبيعية بالكلية)", cat: "medical", catAr: "مصطلح طبي", ctx: "حالة غير طبيعية في الكلية (-osis = abnormal condition).", ex: "nephr + osis" },
+  "tracheotomy": { ar: "شق القصبة الهوائية", cat: "medical", catAr: "إجراء طبي", ctx: "عملية شق في القصبة الهوائية (-tomy = cutting into; incision).", ex: "trache/o/tomy" },
+  "colostomy": { ar: "فغر القولون (فتح فتحة جديدة)", cat: "medical", catAr: "إجراء طبي", ctx: "تكوين فتحة جديدة في القولون (-stomy = forming a new opening).", ex: "col/o/stomy" },
+
+  // Directional Terms (Slides 36-38)
+  "cranial": { ar: "جمجمي / باتجاه الرأس", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "باتجاه الرأس (toward the head).", ex: "Cranial, crani/o" },
+  "caudal": { ar: "ذَنَبي / باتجاه الخلف أو الذيل", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "باتجاه الخلف أو أسفل العمود الفقري/الذيل (toward the back or tail).", ex: "Caudal, caud/o" },
+  "dorsal": { ar: "ظهري / قريب من السطح العلوي أو الخلفي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "قريب من السطح العلوي أو الظهر (near upper surface, back).", ex: "Dorsal, dors/o" },
+  "ventral": { ar: "بطني / باتجاه الأسفل أو الأمام", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "باتجاه الأسفل أو الأمام (toward the bottom, front).", ex: "Ventral" },
+  "posterior": { ar: "خلفي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "خلف، وراء، باتجاه المؤخرة (back, behind, after, toward the rear).", ex: "Posterior (Dorsal)" },
+  "anterior": { ar: "أمامي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "أمام، في مقدمة الجسم (front, in front of).", ex: "Anterior (Ventral)" },
+  "midline": { ar: "خط المنتصف", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "الخط العمودي الوهمي الذي يقسم الجسم إلى نصفين متماثلين أيمن وأيسر.", ex: "Standard Anatomical Terms" },
+  "lateral": { ar: "جانبي (بعيد عن خط المنتصف)", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "بعيداً عن خط منتصف الجسم باتجاه الجانب.", ex: "Lateral arrow away from midline" },
+  "medial": { ar: "إنسي / وسطي (قريب من خط المنتصف)", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "قريباً من خط منتصف الجسم.", ex: "Medial arrow toward midline" },
+  "superior": { ar: "علوي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "باتجاه الأعلى أو الرأس.", ex: "Superior (upward arrow)" },
+  "inferior": { ar: "سفلي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "باتجاه الأسفل أو القدمين.", ex: "Inferior (downward arrow)" },
+  "superficial": { ar: "سطحي", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "قريب من سطح الجسم (من أسئلة الواجب).", ex: "Homework #6" },
+  "deep": { ar: "عميق", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "بعيد عن سطح الجسم باتجاه الداخل (من أسئلة الواجب).", ex: "Homework #7" },
+  "proximal": { ar: "قريب (من نقطة اتصال الطرف بالجذع)", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "أقرب إلى نقطة اتصال الطرف بالجسم أو مركزه.", ex: "Proximal (upward on limb)" },
+  "distal": { ar: "بعيد (عن نقطة اتصال الطرف بالجذع)", cat: "directional", catAr: "مصطلح اتجاهي", ctx: "أبعد عن نقطة اتصال الطرف بالجسم أو مركزه.", ex: "Distal (downward on limb)" },
+
+  // General English Academic Words in the Lecture (for smooth word-click)
+  "medical": { ar: "طبي", cat: "general", catAr: "كلمة عامة", ctx: "متعلق بالطب أو الرعاية الصحية." },
+  "language": { ar: "لغة", cat: "general", catAr: "كلمة عامة", ctx: "نظام تواصل علمي أو لغوي." },
+  "accurately": { ar: "بدقة", cat: "general", catAr: "كلمة عامة", ctx: "بشكل دقيق وصحيح علمياً." },
+  "describe": { ar: "يصف", cat: "general", catAr: "كلمة عامة", ctx: "توضيح وشرح الخصائص." },
+  "human": { ar: "بشري / الإنسان", cat: "general", catAr: "كلمة عامة", ctx: "متعلق بجسم الإنسان." },
+  "body": { ar: "جسم", cat: "general", catAr: "كلمة عامة", ctx: "جسم الإنسان وأعضاؤه." },
+  "components": { ar: "مكونات", cat: "general", catAr: "كلمة عامة", ctx: "الأجزاء التي يتكون منها الجسم أو المصطلح." },
+  "conditions": { ar: "حالات", cat: "general", catAr: "كلمة عامة", ctx: "الحالات الصحية أو المرضية." },
+  "coditions": { ar: "حالات (خطأ مطبعي في الشريحة لـ conditions)", cat: "general", catAr: "ملاحظة مصدر", ctx: "وردت في شريحة 2 بكتابة coditions والمقصود conditions." },
+  "processes": { ar: "عمليات", cat: "general", catAr: "كلمة عامة", ctx: "العمليات الحيوية أو الطبية." },
+  "procedures": { ar: "إجراءات", cat: "general", catAr: "كلمة عامة", ctx: "الإجراءات الجراحية أو التشخيصية." },
+  "origins": { ar: "أصول", cat: "general", catAr: "كلمة عامة", ctx: "المصدر اللغوي التاريخي للكلمات." },
+  "greek": { ar: "يوناني / إغريقي", cat: "general", catAr: "كلمة عامة", ctx: "إحدى اللغتين الأساسيتين لأصل المصطلحات الطبية." },
+  "latin": { ar: "لاتيني", cat: "general", catAr: "كلمة عامة", ctx: "إحدى اللغتين الأساسيتين لأصل المصطلحات الطبية." },
+  "necessary": { ar: "ضروري", cat: "general", catAr: "كلمة عامة", ctx: "ليس من الضروري دراسة اليونانية واللاتينية كاملة." },
+  "communication": { ar: "تواصل", cat: "general", catAr: "كلمة عامة", ctx: "التواصل الدقيق بين الكادر الصحي." },
+  "healthcare": { ar: "الرعاية الصحية", cat: "general", catAr: "كلمة عامة", ctx: "القطاع والكادر الطبي." },
+  "documentation": { ar: "التوثيق / السجلات", cat: "general", catAr: "كلمة عامة", ctx: "التقارير والملفات الطبية للمريض." },
+  "chart": { ar: "ملف المريض الطبي", cat: "general", catAr: "كلمة عامة", ctx: "السجل الطبي الذي يوثق حالة المريض." },
+  "literature": { ar: "الأدبيات العلمية", cat: "general", catAr: "كلمة عامة", ctx: "المصادر والمجلات والأبحاث العلمية." },
+  "elements": { ar: "عناصر", cat: "general", catAr: "كلمة عامة", ctx: "العناصر الأربعة المكونة للكلمة الطبية." },
+  "syllable": { ar: "مقطع لفظي", cat: "general", catAr: "كلمة عامة", ctx: "جزء صغير يُضاف لبداية الكلمة." },
+  "beginning": { ar: "بداية", cat: "general", catAr: "كلمة عامة", ctx: "موقع البادئة في أول الكلمة." },
+  "meaning": { ar: "معنى", cat: "general", catAr: "كلمة عامة", ctx: "الدلالة العلمية للمصطلح." },
+  "negation": { ar: "النفي", cat: "general", catAr: "كلمة عامة", ctx: "بادئات تدل على الغياب أو النفي أو الضد." },
+  "measurement": { ar: "القياس", cat: "general", catAr: "كلمة عامة", ctx: "بادئات تدل على الحجم أو السرعة أو الكمية." },
+  "foundation": { ar: "أساس", cat: "general", catAr: "كلمة عامة", ctx: "الجزء الأساسي في الكلمة وهو الجذر." },
+  "inflammation": { ar: "التهاب", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -itis." },
+  "weakness": { ar: "ضعف", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -paresis." },
+  "paralysis": { ar: "شلل", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -plegia." },
+  "swelling": { ar: "تورم", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -edema." },
+  "pain": { ar: "ألم", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقتين -algia و -odynia." },
+  "enlargement": { ar: "تضخم", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -megaly." },
+  "pronounce": { ar: "ينطق", cat: "general", catAr: "كلمة عامة", ctx: "نطق الكلمة الطبية بسهولة باستخدام حرف الربط." },
+  "instrument": { ar: "أداة / جهاز", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -scope." },
+  "examination": { ar: "فحص", cat: "general", catAr: "مصطلح شائع", ctx: "الفحص الطبي بالمنظار (-scopy)." },
+  "incision": { ar: "شق جراحي", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -tomy." },
+  "excision": { ar: "استئصال / قطع وإزالة", cat: "general", catAr: "مصطلح شائع", ctx: "معنى اللاحقة -ectomy." },
+  "tumor": { ar: "ورم", cat: "general", catAr: "مصطلح شائع", ctx: "معنى الجذر Onco واللاحقة -oma." },
+  "disease": { ar: "مرض", cat: "general", catAr: "مصطلح شائع", ctx: "معنى الجذر Patho." },
+  "stomach": { ar: "المعدة", cat: "general", catAr: "عضو", ctx: "معنى الجذر Gastro." },
+  "intestines": { ar: "الأمعاء", cat: "general", catAr: "عضو", ctx: "معنى الجذر Entero." },
+  "kidney": { ar: "الكلية", cat: "general", catAr: "عضو", ctx: "معنى الجذرين Nephro (يوناني) و Reno (لاتيني)." },
+  "liver": { ar: "الكبد", cat: "general", catAr: "عضو", ctx: "معنى الجذر Hepato." },
+  "blood": { ar: "الدم", cat: "general", catAr: "سائل حيوي", ctx: "معنى الجذر Hemato." },
+  "heart": { ar: "القلب", cat: "general", catAr: "عضو", ctx: "معنى الجذر Cardio." },
+  "brain": { ar: "الدماغ", cat: "general", catAr: "عضو", ctx: "معنى الجذر Encephalo." },
+  "cerebrum": { ar: "المخ", cat: "general", catAr: "عضو", ctx: "معنى الجذر Cerebro." },
+  "bladder": { ar: "المثانة", cat: "general", catAr: "عضو", ctx: "معنى الجذر Cysto (urinary bladder)." },
+  "abdomen": { ar: "البطن", cat: "general", catAr: "منطقة تشريحية", ctx: "معنى الجذر Laparo." },
+  "nerve": { ar: "عصب", cat: "general", catAr: "عضو", ctx: "معنى الجذر Neuro." },
+  "bone": { ar: "عظم", cat: "general", catAr: "عضو", ctx: "معنى الجذر Osteo." },
+  "joint": { ar: "مفصل", cat: "general", catAr: "عضو", ctx: "معنى الجذر Arthro." },
+  "gland": { ar: "غدة", cat: "general", catAr: "عضو", ctx: "معنى الجذر Adeno." },
+  "skin": { ar: "الجلد", cat: "general", catAr: "عضو", ctx: "معنى الجذر Dermato." },
+  "nose": { ar: "الأنف", cat: "general", catAr: "عضو", ctx: "معنى الجذر Rhino." },
+  "eye": { ar: "العين", cat: "general", catAr: "عضو", ctx: "معنى الجذر Ophthalmo." },
+  "cancer": { ar: "سرطان", cat: "general", catAr: "مرض", ctx: "معنى الجذر Carcino." },
+  "homework": { ar: "واجب منزلي", cat: "general", catAr: "كلمة عامة", ctx: "الواجب الموجود في الشريحة 38." }
+};
+
+/* Units Array covering 100% of Pages 1 to 39 in exact lecture sequence */
+const UNITS = [
+  {
+    id: "u1",
+    num: 1,
+    titleAr: "مقدمة في المصطلحات الطبية وعناصر التحليل",
+    titleEn: "Introduction to Medical Terminology & Word Analysis",
+    pages: "Pages 1–6",
+    transition: "anim-depth-zoom",
+    paragraphs: [
+      {
+        id: "u1p1",
+        page: "Pages 1–2",
+        title: "تعريف المصطلحات الطبية وأصولها اللغوية",
+        enBlocks: [
+          "Medical Terminology is language that is used to accurately describe the human body and associated components, coditions, processes and procedures in a science-based manner.",
+          "Medical word origins are usually from the Greek and Latin languages. It is not necessary to study these languages."
+        ],
+        ar: "المصطلحات الطبية هي لغة تُستخدم لوصف جسم الإنسان والمكونات المرتبطة به، والحالات، والعمليات، والإجراءات بطريقة علمية دقيقة. تعود أصول الكلمات الطبية عادةً إلى اللغتين اليونانية واللاتينية، وليس من الضروري دراسة هاتين اللغتين لإتقان المصطلحات الطبية.",
+        sourceNote: "ملاحظة دقة المصدر (شريحة 2): وردت كلمة coditions بهذا الإملاء في الشريحة الأصلية والمقصود بها conditions (حالات). المرجع المعتمد في شريحة 1: Medical Terminology: A Short Course, 8th Edition by Davi-Ellen Chabner, Saunders Elsevier, 2018 (EVOLVE.ELSEVIER.COM).",
+        mcqs: [
+          {
+            id: "q_u1p1_1",
+            q: "What is the primary purpose of Medical Terminology according to the lecture?",
+            qAr: "ما الغرض الأساسي من المصطلحات الطبية حسب المحاضرة؟",
+            opts: [
+              "To translate ancient Greek poetry into English",
+              "To accurately describe the human body, its components, conditions, processes, and procedures in a science-based manner",
+              "To replace clinical examinations with written charts",
+              "To require medical students to master Latin grammar"
+            ],
+            ans: 1,
+            exp: "تُستخدم المصطلحات الطبية لوصف جسم الإنسان ومكوناته وحالاته وعملياته وإجراءاته بدقة وبأسلوب علمي."
+          },
+          {
+            id: "q_u1p1_2",
+            q: "Which languages do medical word origins usually come from, and must students study them?",
+            qAr: "ما اللغتان اللتان تعود إليهما أصول الكلمات الطبية غالباً، وهل يجب دراستهما؟",
+            opts: [
+              "Greek and Latin; it is NOT necessary to study these languages",
+              "Greek and Latin; students must study both languages fluently",
+              "French and German; it is not necessary to study them",
+              "Arabic and English; students must study Greek only"
+            ],
+            ans: 0,
+            exp: "أصول الكلمات الطبية عادةً يونانية ولاتينية، وتؤكد المحاضرة أنه ليس من الضروري دراسة هاتين اللغتين."
+          }
+        ]
+      },
+      {
+        id: "u1p2",
+        page: "Page 3",
+        title: "المصطلحات الطبية كقطع الأحجية (Jigsaw Puzzles)",
+        enBlocks: [
+          "Medical terms are like individual jigsaw puzzles.",
+          "They consist of (prefixes, Roots, combining forms, and suffixes) that make each term unique."
+        ],
+        ar: "تشبه المصطلحات الطبية قطع أحجية التركيب (Jigsaw Puzzles) الفردية؛ فهي تتكون من البادئات (Prefixes)، والجذور (Roots)، وصيغ الربط (Combining forms)، واللواحق (Suffixes) التي تجعل كل مصطلح فريداً.",
+        diagram: "jigsaw",
+        mcqs: [
+          {
+            id: "q_u1p2_1",
+            q: "In the lecture's visual analogy, medical terms are compared to:",
+            qAr: "بماذا شبّهت المحاضرة المصطلحات الطبية في الشريحة 3؟",
+            opts: [
+              "Random dictionary entries",
+              "Mathematical equations",
+              "Individual jigsaw puzzles made of prefixes, roots, combining forms, and suffixes",
+              "Chronological timelines"
+            ],
+            ans: 2,
+            exp: "شبّهت المحاضرة المصطلحات الطبية بقطع أحجية (Jigsaw puzzles) تتكون من البادئة وصيغة الربط والجذر واللاحقة."
+          }
+        ]
+      },
+      {
+        id: "u1p3",
+        page: "Pages 4–6",
+        title: "أهمية المصطلحات الطبية وعناصر تحليل الكلمة الأربعة",
+        enBlocks: [
+          "Why is medical terminology so important? Learning medical terminology will help the student to:",
+          "• Communication between healthcare staff.",
+          "• Understand and translate documentation found in a patient's chart.",
+          "• Information in scientific literature, journal, research articles and other written materials.",
+          "Word Analysis: To analyze medical words, we need to understand 4 elements that are used to form the words: 1- Prefix, 2- Word root, 3- Suffix, 4- Combining form."
+        ],
+        ar: "لماذا تُعد المصطلحات الطبية مهمة جداً؟ يساعد تعلمها الطالب على: التواصل الفعّال بين أفراد الكادر الصحي، وفهم وترجمة التوثيق الموجود في ملف المريض الطبي، وفهم المعلومات الواردة في الأدبيات العلمية والمجلات والأبحاث والمواد المكتوبة الأخرى. ولتحليل الكلمات الطبية نحتاج إلى فهم 4 عناصر: 1- البادئة (Prefix)، 2- جذر الكلمة (Word root)، 3- اللاحقة (Suffix)، 4- صيغة الربط (Combining form).",
+        mcqs: [
+          {
+            id: "q_u1p3_1",
+            q: "Which of the following is NOT listed among the 3 benefits of learning medical terminology?",
+            qAr: "أي من الخيارات التالية لم يُذكر ضمن فوائد تعلم المصطلحات الطبية في شريحة 5؟",
+            opts: [
+              "Communication between healthcare staff",
+              "Understanding and translating documentation in a patient's chart",
+              "Understanding information in scientific literature and research articles",
+              "Memorizing all Latin verbs before clinical training"
+            ],
+            ans: 3,
+            exp: "الفوائد الثلاث المذكورة هي: التواصل بين الكادر الصحي، وفهم ملف المريض، وقراءة الأدبيات والأبحاث العلمية."
+          },
+          {
+            id: "q_u1p3_2",
+            q: "How many elements are needed to analyze and form medical words?",
+            qAr: "كم عدد العناصر المطلوبة لتحليل وتكوين الكلمات الطبية؟",
+            opts: [
+              "2 elements (Prefix and Suffix)",
+              "3 elements (Root, Vowel, and Synonym)",
+              "4 elements (Prefix, Word root, Suffix, and Combining form)",
+              "5 elements (Greek root, Latin root, Prefix, Suffix, and Plural)"
+            ],
+            ans: 2,
+            exp: "تحدد شريحة 6 أربعة عناصر أساسية: البادئة (Prefix)، الجذر (Word root)، اللاحقة (Suffix)، وصيغة الربط (Combining form)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u2",
+    num: 2,
+    titleAr: "العنصر الأول: البادئات (Prefixes)",
+    titleEn: "Element 1: Prefixes (Time, Position, Negation, Measurement & Numbers)",
+    pages: "Pages 7–10",
+    transition: "anim-directional-wipe",
+    paragraphs: [
+      {
+        id: "u2p1",
+        page: "Page 7",
+        title: "تعريف البادئة ودلالاتها",
+        enBlocks: [
+          "A prefix is a syllable that is placed at the beginning of a work [word] or word root to change the meaning or create a new word.",
+          "Prefixes may indicate time, position, negation or measurement and numbers.",
+          "Not all medical words have a prefix."
+        ],
+        ar: "البادئة هي مقطع يُوضع في بداية الكلمة أو جذر الكلمة لتغيير المعنى أو إنشاء كلمة جديدة. قد تدل البادئات على الزمن (Time)، أو الموقع (Position)، أو النفي (Negation)، أو القياس (Measurement) والأرقام (Numbers). وليس لكل الكلمات الطبية بادئة.",
+        sourceNote: "ملاحظة مصدر (شريحة 7): وردت كلمة work في النص الأصلي والمقصود بها word.",
+        mcqs: [
+          {
+            id: "q_u2p1_1",
+            q: "Where is a prefix placed, and does every medical word have one?",
+            qAr: "أين توضع البادئة، وهل تحتوي كل كلمة طبية على بادئة؟",
+            opts: [
+              "At the end of a word root; every medical word has a prefix",
+              "At the beginning of a word or word root; NOT all medical words have a prefix",
+              "Between two word roots; every medical word has at least one",
+              "Only at the end of Greek words; Latin words have no prefixes"
+            ],
+            ans: 1,
+            exp: "توضع البادئة في بداية الكلمة أو الجذر لتغيير المعنى، ولا تحتوي جميع الكلمات الطبية على بادئة."
+          }
+        ]
+      },
+      {
+        id: "u2p2",
+        page: "Page 8",
+        title: "بادئات الزمن والموقع (Time & Position Prefixes)",
+        enBlocks: [
+          "Time and Position prefixes specify when an event occurs or where a structure is located relative to another body part."
+        ],
+        ar: "تحدد بادئات الزمن والموقع توقيت الحدث الطبي (قبل أو بعد) أو موقع العضو والتركيب التشريحي (داخل، خارج، تحت، فوق، خلف، بين، محيط بـ).",
+        sourceNote: "ملاحظة مصدر (شريحة 8): كُتبت البادئة Retro بصيغة Rerto في الجدول الأصلي، بينما جاء المثال صحيحاً Retrogastric.",
+        table: {
+          headers: ["Category", "Prefix / Meaning", "Example", "المعنى بالعربية"],
+          rows: [
+            ["Time", "Pre-: before  ✕  Post-: after", "Postoperative (after surgery)", "قبل ✕ بعد — ما بعد الجراحة"],
+            ["Time", "Pro: before, forward", "prognosis is a prediction (before knowledge)", "قبل / للأمام — التنبؤ بسير المرض"],
+            ["Position", "Exo / Ecto: outside  ✕  endo: inside", "Exocrine glands", "خارج ✕ داخل — الغدد خارجية الإفراز"],
+            ["Position", "Sub: Under, below  ✕  Epi-: above, upon", "Subgastric (under stomach)", "تحت ✕ فوق — تحت المعدة"],
+            ["Position", "Intra-: Within, inside  ✕  extra: outside", "Intracellular", "داخل ✕ خارج — داخل الخلية"],
+            ["Position", "Retro (Rerto): behind", "Retrogastric", "خلف — خلف المعدة"],
+            ["Position", "Inter: between", "Intervertebral", "بين — بين الفقرات"],
+            ["Position", "peri: surrounding", "Pericardium", "محيط بـ — التامور (الغشاء المحيط بالقلب)"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u2p2_1",
+            q: "What is the opposite of the prefix 'Sub-' (under, below)?",
+            qAr: "ما عكس البادئة Sub- (تحت/أسفل) حسب جدول شريحة 8؟",
+            opts: ["Peri-", "Epi- (above, upon)", "Inter-", "Retro-"],
+            ans: 1,
+            exp: "في جدول الموقع: Sub (تحت/أسفل) عكسها Epi- (فوق/على)."
+          },
+          {
+            id: "q_u2p2_2",
+            q: "Which prefix means 'surrounding', as in 'Pericardium'?",
+            qAr: "أي بادئة تعني (محيط بـ) كما في كلمة Pericardium؟",
+            opts: ["Inter-", "Intra-", "Peri-", "Pro-"],
+            ans: 2,
+            exp: "البادئة peri تعني محيط بـ (surrounding)، ومنها Pericardium أي الغشاء المحيط بالقلب."
+          }
+        ]
+      },
+      {
+        id: "u2p3",
+        page: "Page 9",
+        title: "بادئات النفي (Negation Prefixes)",
+        enBlocks: [
+          "Negation prefixes express absence, removal, opposition, or a bad/painful/difficult condition."
+        ],
+        ar: "تعبّر بادئات النفي عن الغياب (بدون/لا)، أو الإزالة والإبعاد، أو التضاد، أو الحالة السيئة والمؤلمة والصعبة.",
+        table: {
+          headers: ["Prefix", "Meaning", "Example", "المعنى بالعربية"],
+          rows: [
+            ["A-", "Without, not", "Apnea (no breathing)", "بدون / لا — انقطاع التنفس"],
+            ["An-", "Without, not", "Anemia", "بدون / لا — فقر الدم"],
+            ["Non-", "Not", "Non infectious", "غير / لا — غير مُعدٍ"],
+            ["De-", "away from, remove", "Dehydration", "بعيداً عن / إزالة — الجفاف"],
+            ["ab-", "away from", "Abnormal", "بعيداً عن — غير طبيعي"],
+            ["anti", "Against", "Antibody", "ضد — جسم مضاد"],
+            ["Dys", "bad, painful, difficult, abnormal", "Dyspnea", "سيء / مؤلم / صعب / غير طبيعي — ضيق التنفس"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u2p3_1",
+            q: "What does the prefix 'Dys-' indicate in 'Dyspnea'?",
+            qAr: "على ماذا تدل البادئة Dys- في كلمة Dyspnea؟",
+            opts: [
+              "Against",
+              "Bad, painful, difficult, or abnormal",
+              "Without or remove",
+              "Rapid or excessive"
+            ],
+            ans: 1,
+            exp: "تدل البادئة Dys- على السيء أو المؤلم أو الصعب أو غير الطبيعي، فـ Dyspnea تعني صعوبة التنفس."
+          },
+          {
+            id: "q_u2p3_2",
+            q: "Which prefix means 'away from, remove' as in 'Dehydration'?",
+            qAr: "أي بادئة تعني (إزالة / بعيداً عن) كما في Dehydration؟",
+            opts: ["Anti-", "An-", "De-", "Non-"],
+            ans: 2,
+            exp: "البادئة De- تعني away from / remove ومن أمثلتها Dehydration (فقدان الماء/الجفاف)."
+          }
+        ]
+      },
+      {
+        id: "u2p4",
+        page: "Page 10",
+        title: "بادئات القياس والأرقام (Measurement & Numbers Prefixes)",
+        enBlocks: [
+          "Measurement prefixes describe size, level, speed, or quantity, while Number prefixes specify exact numerical counts from one to six."
+        ],
+        ar: "تصف بادئات القياس الحجم (صغير/كبير)، والمستوى (مفرط/منخفض)، والسرعة (بطيء/سريع)، والكمية (كثير)، بينما تحدد بادئات الأرقام العدد بدقة من واحد إلى ستة.",
+        sourceNote: "ملاحظة مصدر (شريحة 10): تركت الشريحة علامة استفهام أمام Hypo:? وقد ورد معناها في شريحة 33 (below, less than normal).",
+        table: {
+          headers: ["Category", "Prefix / Meaning", "Example", "المعنى بالعربية"],
+          rows: [
+            ["Measurement", "Micro-: Small  ✕  macro: large", "macromolecule", "صغير ✕ كبير — جزيء ضخم"],
+            ["Measurement", "Hyper: excessive, more than normal  ✕  Hypo: ? (below, less than normal)", "hyperglycemia", "مفرط ✕ منخفض — ارتفاع سكر الدم"],
+            ["Measurement", "brady: slow  ✕  Tachy: rapid", "bradycardia", "بطيء ✕ سريع — بطء ضربات القلب"],
+            ["Measurement", "poly-: many, much", "polyuria", "كثير / متعدد — كثرة التبول"],
+            ["Numbers", "Mono-: One | Di-: Two | Tri-: Three", "Monosaccharide", "واحد / اثنان / ثلاثة — سكر أحادي"],
+            ["Numbers", "Quadri-: Four | Penta-: Five | Hexa-: Six", "Quadriplegia", "أربعة / خمسة / ستة — شلل رباعي"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u2p4_1",
+            q: "What is the opposite of 'brady-' (slow)?",
+            qAr: "ما عكس البادئة brady- (بطيء)؟",
+            opts: ["Poly-", "Macro-", "Tachy- (rapid)", "Hyper-"],
+            ans: 2,
+            exp: "البادئة brady تعني بطيء وعكسها Tachy وتعني سريع."
+          },
+          {
+            id: "q_u2p4_2",
+            q: "In 'Quadriplegia', what number does the prefix 'Quadri-' represent?",
+            qAr: "ما الرقم الذي تمثله البادئة Quadri- في مصطلح Quadriplegia؟",
+            opts: ["Two", "Three", "Four", "Six"],
+            ans: 2,
+            exp: "Quadri- تعني أربعة (Four)، و Quadriplegia تعني الشلل الرباعي."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u3",
+    num: 3,
+    titleAr: "العنصر الثاني: جذر الكلمة (The Word Root)",
+    titleEn: "Element 2: The Word Root & Greek vs. Latin Equivalents",
+    pages: "Pages 11–13",
+    transition: "anim-blur-focus",
+    paragraphs: [
+      {
+        id: "u3p1",
+        page: "Page 11",
+        title: "تعريف جذر الكلمة ودلالاته (الأعضاء والألوان)",
+        enBlocks: [
+          "The word root is the main part or foundation of a word.",
+          "In medical terminology, the root may indicate body parts or colors.",
+          "Usually derived from Greek or Latin.",
+          "Medical terms have one or more roots.",
+          "Examples: cardial – heart (body part) | cyanosis – blue (color)."
+        ],
+        ar: "جذر الكلمة هو الجزء الرئيسي أو الأساس الذي تُبنى عليه الكلمة. في المصطلحات الطبية، قد يدل الجذر على أجزاء الجسم (مثل cardi بمعنى قلب في cardial) أو على الألوان (مثل cyan بمعنى أزرق في cyanosis). ويُشتق الجذر عادةً من اليونانية أو اللاتينية، وقد يحتوي المصطلح الطبي على جذر واحد أو أكثر.",
+        mcqs: [
+          {
+            id: "q_u3p1_1",
+            q: "In the example 'cyanosis', what does the word root 'cyan' indicate?",
+            qAr: "على ماذا يدل الجذر cyan في مثال cyanosis؟",
+            opts: [
+              "A body part (heart)",
+              "A color (blue)",
+              "A surgical procedure",
+              "A time prefix"
+            ],
+            ans: 1,
+            exp: "الجذر cyan يدل على اللون الأزرق (color: blue)، بينما الجذر cardi يدل على عضو من الجسم (heart)."
+          }
+        ]
+      },
+      {
+        id: "u3p2",
+        page: "Page 12",
+        title: "أمثلة على جذور الكلمات الطبية",
+        enBlocks: [
+          "A medical word may be simply a root or it may be a combination of word elements:",
+          "• sclera – white of the eye (one root)",
+          "• Osteoarthritis → Oste/o/arthr/itis (2 roots and a suffix)",
+          "• Gyne means woman",
+          "• Dent means tooth",
+          "• Lingua means tongue"
+        ],
+        ar: "قد تكون الكلمة الطبية مجرد جذر واحد فقط أو مزيجاً من عدة عناصر: فكلمة sclera (صلبة العين/بياض العين) تتكون من جذر واحد، بينما Osteoarthritis تنقسم إلى Oste/o/arthr/itis (جذران ولاحقة). ومن أمثلة الجذور أيضاً: Gyne (امرأة)، Dent (سن)، و Lingua (لسان).",
+        mcqs: [
+          {
+            id: "q_u3p2_1",
+            q: "How is the medical term 'Osteoarthritis' analyzed into its elements?",
+            qAr: "كيف يُحلّل المصطلح Osteoarthritis في شريحة 12؟",
+            opts: [
+              "One root only",
+              "Prefix + 1 root",
+              "2 roots (Oste + arthr) with combining vowel 'o' and a suffix (-itis)",
+              "1 root and 2 suffixes"
+            ],
+            ans: 2,
+            exp: "يتكون Oste/o/arthr/itis من جذرين (Oste عظم، arthr مفصل) يربطهما حرف الربط o، ولاحقة itis."
+          },
+          {
+            id: "q_u3p2_2",
+            q: "Which root means 'tongue'?",
+            qAr: "أي جذر من التالية يعني (لسان)؟",
+            opts: ["Gyne", "Dent", "Lingua", "Sclera"],
+            ans: 2,
+            exp: "Lingua تعني اللسان (tongue)، بينما Gyne تعني امرأة و Dent تعني سن."
+          }
+        ]
+      },
+      {
+        id: "u3p3",
+        page: "Page 13",
+        title: "تعدد الجذور للعضو نفسه (اليوناني مقابل اللاتيني)",
+        enBlocks: [
+          "Often there is more than one root for the same body part (one Greek and one Latin):",
+          "• Uterus: Greek -hyster- (hysterectomy) vs. Latin -uter- (uterine/uterus)",
+          "• Kidney: Greek -nephr- (nephrotomy) vs. Latin -ren- (renal kidney)"
+        ],
+        ar: "غالباً ما يوجد أكثر من جذر لنفس الجزء من الجسم بسبب تعدد الأصل بين اليوناني واللاتيني؛ فالرحم له الجذر اليوناني hyster- (مثل hysterectomy) واللاتيني uter- (مثل uterine/uterus)، والكلية لها الجذر اليوناني nephr- (مثل nephrotomy) واللاتيني ren- (مثل renal). وينطبق الأمر نفسه على بعض البادئات المكانية كما في الجدول أدناه.",
+        table: {
+          headers: ["Meaning", "Greek", "Latin", "Example", "المعنى بالعربية"],
+          rows: [
+            ["Uterus (Body Part)", "-hyster-", "-uter-", "hysterectomy / uterine, uterus", "الرحم — استئصال الرحم / رحمي"],
+            ["Kidney (Body Part)", "-nephr-", "-ren-", "nephrotomy / renal kidney", "الكلية — شق الكلية / كلوي"],
+            ["Inside / within", "endo-", "Intra-", "endoscopy", "داخل / ضمن — التنظير الداخلي"],
+            ["Outside", "Ec- / exo-", "extra", "Ectopic / exocrine / extra", "خارج — منتبذ / خارجي الإفراز"],
+            ["Underneath", "Hypo-", "Sub-", "Hypoglossal / subcutaneous", "تحت / أسفل — تحت اللسان / تحت الجلد"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u3p3_1",
+            q: "Which pair correctly matches the Greek and Latin roots for 'kidney'?",
+            qAr: "أي زوج يطابق الجذر اليوناني واللاتيني للكلية بشكل صحيح؟",
+            opts: [
+              "Greek: -hyster- | Latin: -uter-",
+              "Greek: -nephr- | Latin: -ren-",
+              "Greek: -ren- | Latin: -nephr-",
+              "Greek: -sub- | Latin: -hypo-"
+            ],
+            ans: 1,
+            exp: "الجذر اليوناني للكلية هو -nephr- (مثل nephrotomy) والجذر اللاتيني هو -ren- (مثل renal)."
+          },
+          {
+            id: "q_u3p3_2",
+            q: "What is the Latin equivalent of the Greek prefix 'Hypo-' (underneath)?",
+            qAr: "ما المقابل اللاتيني للبادئة اليونانية Hypo- (تحت)؟",
+            opts: ["Intra-", "Extra-", "Sub-", "Ec-"],
+            ans: 2,
+            exp: "تقابل Hypo- اليونانية البادئة Sub- اللاتينية، وكلاهما يعني تحت/أسفل (مثل Hypoglossal و subcutaneous)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u4",
+    num: 4,
+    titleAr: "العنصر الثالث: اللواحق (Suffixes)",
+    titleEn: "Element 3: Suffixes (Rules, Signs & Symptoms, Descriptive)",
+    pages: "Pages 14–16",
+    transition: "anim-perspective-tunnel",
+    paragraphs: [
+      {
+        id: "u4p1",
+        page: "Page 14",
+        title: "تعريف اللاحقة وقاعدة حرف الربط معها",
+        enBlocks: [
+          "A suffix is added to the end of a word root or combining form to modify the meaning.",
+          "The suffix may indicate a procedure, conditions, disorder, or a disease.",
+          "• The combining vowel may be used to link word roots to the suffix that begins with a consonant (Examples shown in slide: sclera/osis, arthr/oscopy).",
+          "• The combining vowel is NOT used to link word roots with a suffix if it begins with a vowel (Examples: arthr/itis, gastr/ectomy)."
+        ],
+        ar: "تُضاف اللاحقة إلى نهاية جذر الكلمة أو صيغة الربط لتعديل المعنى، وقد تدل على إجراء طبي (procedure) أو حالة (condition) أو اضطراب (disorder) أو مرض (disease). يُستخدم حرف الربط لربط الجذر باللاحقة التي تبدأ بحرف ساكن، ولا يُستخدم حرف الربط إذا كانت اللاحقة تبدأ بحرف علة (مثل arthr/itis و gastr/ectomy).",
+        sourceNote: "ملاحظة مصدر (شريحة 14): أوردت الشريحة مثالَي sclera/osis و arthr/oscopy تحت قاعدة الحرف الساكن كما هما في الملف الأصلي، بينما توضح القاعدة القياسية في الشريحة 17 و 21 حذف حرف الربط قبل اللاحقة المبدوءة بحرف علة مثل arthr/itis.",
+        mcqs: [
+          {
+            id: "q_u4p1_1",
+            q: "When is the combining vowel NOT used to link a word root with a suffix?",
+            qAr: "متى لا يُستخدم حرف الربط لربط الجذر باللاحقة؟",
+            opts: [
+              "When the suffix begins with a consonant",
+              "When the suffix begins with a vowel (e.g., arthr/itis, gastr/ectomy)",
+              "When the word has a prefix",
+              "When the root is Latin"
+            ],
+            ans: 1,
+            exp: "لا يُستخدم حرف الربط إذا بدأت اللاحقة بحرف علة، مثل arthr/itis و gastr/ectomy."
+          }
+        ]
+      },
+      {
+        id: "u4p2",
+        page: "Page 15",
+        title: "لواحق العلامات والأعراض (Medical Suffixes — Signs & Symptoms)",
+        enBlocks: [
+          "The following suffixes describe clinical signs and symptoms observed in patients (extracted from Slide 15 visual chart)."
+        ],
+        ar: "تصف اللواحق التالية العلامات والأعراض السريرية الشائعة (مستخرجة بالكامل من الجدول والرسوم التوضيحية في شريحة 15).",
+        table: {
+          headers: ["Suffix", "Meaning", "Illustrated Example", "المعنى والمثال بالعربية"],
+          rows: [
+            ["-itis", "Inflammation", "Arthritis", "التهاب — التهاب المفاصل"],
+            ["-paresis", "Weakness", "Hemiparesis", "ضعف — ضعف نصفي"],
+            ["-plegia", "Paralysis", "Quadriplegia", "شلل — شلل رباعي"],
+            ["-rrhea", "Discharge/Flow", "Rhinorrhea", "سيلان/تدفق — سيلان الأنف"],
+            ["-edema", "Swelling", "Blepharedema", "تورم — تورم الجفن"],
+            ["-odynia", "Pain/Discomfort", "Osteodynia", "ألم/انزعاج — ألم العظام"],
+            ["-spasm", "Muscle Contraction", "Vasospasm", "تقلص عضلي/تشنج — تشنج وعائي"],
+            ["-rrhage / -rrhagia", "Excessive Flow/Discharge", "Hemorrhage", "تدفق/إفراز مفرط — نزيف شديد"],
+            ["-algia", "Pain", "Cephalgia", "ألم — صداع (ألم الرأس)"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u4p2_1",
+            q: "What is the difference between '-rrhea' and '-rrhage/-rrhagia'?",
+            qAr: "ما الفرق بين اللاحقتين -rrhea و -rrhage/-rrhagia؟",
+            opts: [
+              "-rrhea means swelling; -rrhage means pain",
+              "-rrhea means Discharge/Flow; -rrhage/-rrhagia means Excessive Flow/Discharge",
+              "-rrhea means paralysis; -rrhage means weakness",
+              "They mean inflammation and muscle contraction respectively"
+            ],
+            ans: 1,
+            exp: "-rrhea تعني تدفق/سيلان (مثل Rhinorrhea)، أما -rrhage/-rrhagia فتعني تدفق مفرط (مثل Hemorrhage)."
+          },
+          {
+            id: "q_u4p2_2",
+            q: "Which suffix means 'Weakness' as in 'Hemiparesis'?",
+            qAr: "أي لاحقة تعني (ضعف) كما في Hemiparesis؟",
+            opts: ["-plegia", "-paresis", "-edema", "-spasm"],
+            ans: 1,
+            exp: "-paresis تعني ضعف (Weakness)، بينما -plegia تعني شلل (Paralysis)."
+          }
+        ]
+      },
+      {
+        id: "u4p3",
+        page: "Page 16",
+        title: "اللواحق الوصفية (Medical Suffixes — Descriptive)",
+        enBlocks: [
+          "Descriptive suffixes indicate size changes, vessel narrowing or widening, development, or stopping/control (extracted from Slide 16 visual chart)."
+        ],
+        ar: "تصف هذه اللواحق التغيرات الشكلية والوظيفية مثل التضخم، الصغر، التضيق، التوسع، التكون، والسيطرة/الإيقاف (مستخرجة بالكامل من شريحة 16).",
+        table: {
+          headers: ["Suffix", "Meaning", "Illustrated Example", "المعنى والمثال بالعربية"],
+          rows: [
+            ["-megaly", "Enlargement", "Hepatomegaly", "تضخم — تضخم الكبد"],
+            ["-icle", "Small/Microscopic", "Denticle", "صغير/مجهري — سُنين"],
+            ["-constriction", "Narrow/Contract", "Vasoconstriction", "تضيق/انقباض — تضيق الأوعية"],
+            ["-dilation", "Expand/Widen", "Vasodilation", "توسع — توسع الأوعية"],
+            ["-eurysm", "Expand/Widen", "Aneurysm", "توسع/تمدد — تمدد وعائي"],
+            ["-genesis", "Development/Production", "Neurogenesis", "تطور/إنتاج — تكون الخلايا العصبية"],
+            ["-stasis", "Control/Stop", "Hemostasis", "سيطرة/إيقاف — إيقاف النزيف (الإرقاء)"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u4p3_1",
+            q: "What does the suffix '-stasis' mean in 'Hemostasis'?",
+            qAr: "ماذا تعني اللاحقة -stasis في كلمة Hemostasis؟",
+            opts: ["Enlargement", "Development/Production", "Control/Stop", "Expand/Widen"],
+            ans: 2,
+            exp: "-stasis تعني السيطرة أو الإيقاف (Control/Stop)، فـ Hemostasis تعني إيقاف النزيف."
+          },
+          {
+            id: "q_u4p3_2",
+            q: "Which suffix means 'Small/Microscopic' as seen in 'Denticle'?",
+            qAr: "أي لاحقة تعني (صغير/مجهري) كما في Denticle؟",
+            opts: ["-megaly", "-icle", "-genesis", "-eurysm"],
+            ans: 1,
+            exp: "اللاحقة -icle تعني صغير/مجهري (Small/Microscopic)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u5",
+    num: 5,
+    titleAr: "العنصر الرابع: صيغة الربط، أمثلة التحليل والقواعد الأساسية",
+    titleEn: "Element 4: Combining Form, Worked Examples & Basic Rules",
+    pages: "Pages 17–21",
+    transition: "anim-circular-reveal",
+    paragraphs: [
+      {
+        id: "u5p1",
+        page: "Page 17",
+        title: "صيغة الربط وحرف العلة الرابط (/O/)",
+        enBlocks: [
+          "Many words would be difficult to pronounce if written without a vowel to join the word roots.",
+          "When you take a word root and add a vowel it becomes a combining form. This vowel is usually an /O/ and it is called a combining vowel (e.g., cyst/o, therm/o).",
+          "The combining vowel is used before suffixes that begin with a consonant and before another word root.",
+          "Important rule: Prefixes are not included in this rule."
+        ],
+        ar: "تصعب قراءة ونطق الكثير من الكلمات الطبية إذا كُتبت دون حرف علة يصل بين جذورها. وعند أخذ جذر الكلمة وإضافة حرف علة (يكون عادةً /O/ ويُسمى حرف الربط Combining vowel) نحصل على صيغة الربط (Combining form) مثل cyst/o و therm/o. يُستخدم حرف الربط قبل اللواحق التي تبدأ بحرف ساكن وقبل جذر آخر. ملاحظة مهمة: لا تشمل هذه القاعدة البادئات (Prefixes).",
+        mcqs: [
+          {
+            id: "q_u5p1_1",
+            q: "Which statement about the combining vowel is TRUE according to Slide 17?",
+            qAr: "أي عبارة صحيحة حول حرف الربط (Combining vowel) حسب شريحة 17؟",
+            opts: [
+              "It is usually an /A/ and is required after every prefix",
+              "It is usually an /O/, used before consonant-starting suffixes and before another word root; prefixes are NOT included",
+              "It is only used between a prefix and a suffix",
+              "It is never used when joining two word roots"
+            ],
+            ans: 1,
+            exp: "حرف الربط يكون عادةً /O/ ويُستخدم قبل اللواحق المبدوءة بساكن وقبل جذر آخر، والبادئات غير مشمولة بهذه القاعدة."
+          }
+        ]
+      },
+      {
+        id: "u5p2",
+        page: "Pages 18–19",
+        title: "أمثلة تطبيقية مفصلة لتحليل الكلمات الطبية",
+        enBlocks: [
+          "1. HEMATOLOGY → HEMAT (root: blood) / O (comb.vo.) / LOGY (suffix: study of)",
+          "2. GASTROENTEROLOGY → GASTR (Root: stomach) / O (Comb.vo.) / ENTER (root: intestines) / O (Comb.vo.) / LOGY (suffix: study of)",
+          "3. GASTROSCOPE → GASTR (Root: stomach) / O (Combining form) / SCOPE (suffix: instrument to visually examine)",
+          "4. ENTERITIS → ENTER (Root: intestines) / itis (suffix: inflammation)"
+        ],
+        ar: "توضح الشريحتان 18 و 19 كيفية تفكيك أربعة مصطلحات طبية خطوة بخطوة: علم الدم (HEMAT/O/LOGY)، وعلم أمراض المعدة والأمعاء (GASTR/O/ENTER/O/LOGY)، ومنظار المعدة (GASTR/O/SCOPE)، والتهاب الأمعاء (ENTER/itis حيث حُذف حرف الربط لأن itis تبدأ بحرف علة).",
+        dissection: true,
+        mcqs: [
+          {
+            id: "q_u5p2_1",
+            q: "How many roots and combining vowels are in 'GASTROENTEROLOGY'?",
+            qAr: "كم عدد الجذور وحروف الربط في كلمة GASTROENTEROLOGY؟",
+            opts: [
+              "1 root and 1 combining vowel",
+              "2 roots (GASTR, ENTER) and 2 combining vowels (O, O) plus 1 suffix (LOGY)",
+              "3 roots and 1 combining vowel",
+              "1 prefix, 1 root, and 1 suffix"
+            ],
+            ans: 1,
+            exp: "تتكون GASTROENTEROLOGY من جذرين (GASTR و ENTER) وحرفَي ربط (O و O) ولاحقة واحدة (LOGY)."
+          },
+          {
+            id: "q_u5p2_2",
+            q: "Why does 'ENTERITIS' have no combining vowel 'o'?",
+            qAr: "لماذا لا تحتوي كلمة ENTERITIS على حرف الربط o؟",
+            opts: [
+              "Because ENTER is a prefix",
+              "Because the suffix '-itis' begins with a vowel ('i')",
+              "Because it has two roots",
+              "Because it is a Latin color root"
+            ],
+            ans: 1,
+            exp: "حُذف حرف الربط o لأن اللاحقة -itis تبدأ بحرف علة (i)."
+          }
+        ]
+      },
+      {
+        id: "u5p3",
+        page: "Pages 20–21",
+        title: "ملخص الأجزاء الأربعة والقواعد الأساسية (Some Basic Rules)",
+        enBlocks: [
+          "Important word parts (Slide 20): 1. Root — essential meaning of the term | 2. Suffix — is the word ending | 3. Prefix — small part added to the beginning of a term | 4. Combining vowel — connects roots to suffixes and roots to other roots.",
+          "Some Basic Rules (Slide 21):",
+          "• All medical terms have at least one word root.",
+          "• Not all medical terms have a prefix, suffix, or combining vowel.",
+          "• Combining vowels are used to connect word roots or word root and suffix.",
+          "• When a suffix begins with a vowel, the combining vowel is not used (Example: arthritis, dropping 'o')."
+        ],
+        ar: "الأجزاء الأربعة المهمة: الجذر (المعنى الأساسي)، اللاحقة (نهاية الكلمة)، البادئة (جزء صغير في البداية)، وحرف الربط (يصل الجذور باللواحق وبجذور أخرى). القواعد الأساسية: كل مصطلح طبي يحتوي على جذر واحد على الأقل، وليس لكل المصطلحات بادئة أو لاحقة أو حرف ربط، ويُحذف حرف الربط عندما تبدأ اللاحقة بحرف علة كما في arthritis.",
+        mcqs: [
+          {
+            id: "q_u5p3_1",
+            q: "Which element MUST every medical term have?",
+            qAr: "ما العنصر الذي يجب أن يوجد في كل مصطلح طبي بلا استثناء؟",
+            opts: [
+              "At least one prefix",
+              "At least one word root",
+              "At least one combining vowel",
+              "Both a prefix and a suffix"
+            ],
+            ans: 1,
+            exp: "تنص القاعدة الأساسية الأولى في شريحة 21 على أن جميع المصطلحات الطبية تحتوي على جذر واحد على الأقل (at least one word root)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u6",
+    num: 6,
+    titleAr: "الجذور الطبية الأكثر شيوعاً (Adeno – Rhino)",
+    titleEn: "Commonly Used Medical Roots (28 Essential Roots)",
+    pages: "Pages 22–27",
+    transition: "anim-directional-wipe",
+    paragraphs: [
+      {
+        id: "u6p1",
+        page: "Pages 22–25",
+        title: "الجذور الشائعة — المجموعة الأولى (Adeno إلى Hepato)",
+        enBlocks: [
+          "Commonly used combining forms/roots (Part 1: 17 roots from Adeno to Hepato) with their meanings and medical term examples."
+        ],
+        ar: "المجموعة الأولى من الجذور الطبية الأكثر استخداماً (من Adeno حتى Hepato — 17 جذراً من الشرائح 22 إلى 25) مع معانيها وأمثلتها الطبية.",
+        sourceNote: "ملاحظة مصدر (شريحة 24): ورد مثال Dermato في الشريحة بكتابة dermititis (والإملاء القياسي dermatitis).",
+        table: {
+          headers: ["Root", "Meaning", "Medical Term", "المعنى بالعربية"],
+          rows: [
+            ["Adeno", "gland", "adenoma, adenitis", "غدة — ورم غدي، التهاب الغدة"],
+            ["Arthro", "joint", "arthritis", "مفصل — التهاب المفاصل"],
+            ["Bio", "life", "biology", "حياة — علم الأحياء"],
+            ["Carcino", "cancer", "carcinoma", "سرطان — ورم سرطاني"],
+            ["Cardio", "heart", "cardiology", "قلب — علم أمراض القلب"],
+            ["Cephalo", "head", "cephalic", "رأس — رأسي"],
+            ["Cerebro", "cerebrum", "cerebral", "المخ — مخي"],
+            ["Cysto", "urinary bladder", "cystoscope", "المثانة البولية — منظار المثانة"],
+            ["Cyto", "cell", "cytology", "خلية — علم الخلايا"],
+            ["Dermato", "skin", "dermititis (dermatitis)", "جلد — التهاب الجلد"],
+            ["Electro", "electricity", "electrocardiogram", "كهرباء — تخطيط كهربائية القلب"],
+            ["Encephalo", "brain", "electroencephalogram", "الدماغ — تخطيط كهربائية الدماغ"],
+            ["Entero", "intestines", "enteritis", "الأمعاء — التهاب الأمعاء"],
+            ["Erythro", "red", "erythrocyte", "أحمر — خلية دم حمراء"],
+            ["Gastro", "stomach", "gastroscopy", "المعدة — تنظير المعدة"],
+            ["Hemato", "blood", "hematoma", "الدم — ورم دموي"],
+            ["Hepato", "liver", "hepatitis", "الكبد — التهاب الكبد"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u6p1_1",
+            q: "What does the root 'Cysto' refer to?",
+            qAr: "إلى ماذا يشير الجذر Cysto؟",
+            opts: ["Cell", "Urinary bladder", "Cerebrum", "Liver"],
+            ans: 1,
+            exp: "Cysto يعني المثانة البولية (urinary bladder) ومن أمثلته cystoscope، بينما Cyto يعني خلية (cell)."
+          },
+          {
+            id: "q_u6p1_2",
+            q: "Which root means 'red', as in 'erythrocyte'?",
+            qAr: "أي جذر يعني اللون الأحمر كما في erythrocyte؟",
+            opts: ["Hemato", "Erythro", "Hepato", "Entero"],
+            ans: 1,
+            exp: "Erythro يعني أحمر (red)، و erythrocyte تعني خلية الدم الحمراء."
+          }
+        ]
+      },
+      {
+        id: "u6p2",
+        page: "Pages 26–27",
+        title: "الجذور الشائعة — المجموعة الثانية (Laparo إلى Rhino)",
+        enBlocks: [
+          "Commonly used combining forms/roots (Part 2: 11 roots from Laparo to Rhino) with their meanings and medical term examples."
+        ],
+        ar: "المجموعة الثانية من الجذور الطبية الأكثر استخداماً (من Laparo حتى Rhino — 11 جذراً من الشريحتين 26 و 27) مع معانيها وأمثلتها الطبية.",
+        table: {
+          headers: ["Root", "Meaning", "Medical Term", "المعنى بالعربية"],
+          rows: [
+            ["Laparo", "abdomen", "laparotomy", "البطن — شق البطن"],
+            ["Leuko", "white", "leukocyte", "أبيض — خلية دم بيضاء"],
+            ["Nephro", "kidney", "nephrectomy", "الكلية — استئصال الكلية"],
+            ["Neuro", "nerve", "neurology", "عصب — علم الأعصاب"],
+            ["Onco", "tumor", "oncologist", "ورم — أخصائي الأورام"],
+            ["Ophthalmo", "eye", "ophthalmoscope", "العين — منظار العين"],
+            ["Osteo", "bone", "osteoarthritis", "العظم — التهاب العظم والمفصل"],
+            ["Patho", "disease", "pathologist", "مرض — أخصائي علم الأمراض"],
+            ["Psycho", "mind", "psychosis", "العقل — الذُهان"],
+            ["Reno", "kidney", "renal", "الكلية — كلوي"],
+            ["Rhino", "nose", "rhinitis", "الأنف — التهاب الأنف"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u6p2_1",
+            q: "Which two roots in Slides 26–27 both mean 'kidney'?",
+            qAr: "ما الجذران اللذان يعنيان (الكلية) في الشريحتين 26 و 27؟",
+            opts: [
+              "Laparo and Reno",
+              "Nephro and Reno",
+              "Neuro and Nephro",
+              "Onco and Patho"
+            ],
+            ans: 1,
+            exp: "كل من Nephro (مثل nephrectomy) و Reno (مثل renal) يعنيان الكلية."
+          },
+          {
+            id: "q_u6p2_2",
+            q: "What does the root 'Laparo' mean in 'laparotomy'?",
+            qAr: "ماذا يعني الجذر Laparo في كلمة laparotomy؟",
+            opts: ["Bone", "Abdomen", "Tumor", "Mind"],
+            ans: 1,
+            exp: "Laparo يعني البطن (abdomen)، و laparotomy تعني شق البطن الجراحي."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u7",
+    num: 7,
+    titleAr: "اللواحق والبادئات الأكثر شيوعاً",
+    titleEn: "Commonly Used Suffixes & Prefixes",
+    pages: "Pages 28–35",
+    transition: "anim-blur-focus",
+    paragraphs: [
+      {
+        id: "u7p1",
+        page: "Pages 28–31",
+        title: "اللواحق الطبية الشائعة (21 لاحقة)",
+        enBlocks: [
+          "Comprehensive list of commonly used medical suffixes across diagnostics, pathology, and surgical procedures (Slides 28–31)."
+        ],
+        ar: "القائمة الكاملة للواحق الطبية الأكثر شيوعاً في التشخيص والأمراض والإجراءات الجراحية (الشرائح 28 إلى 31).",
+        sourceNote: "ملاحظة مصدر (شريحة 29): وردت كلمة hepatomegaley بهذا الإملاء في الشريحة الأصلية (والإملاء القياسي hepatomegaly)، وورد معنى -logist بصيغة specialist in the [study of].",
+        table: {
+          headers: ["Suffix", "Meaning", "Medical Term", "المعنى بالعربية"],
+          rows: [
+            ["-al", "pertaining to", "neural", "متعلق بـ — عصبي"],
+            ["-algia", "pain", "arthralgia", "ألم — ألم المفاصل"],
+            ["-cyte", "cell", "leukocyte", "خلية — خلية دم بيضاء"],
+            ["-ectomy", "cutting out, excision / surgical removal", "gastrectomy / thromboectomy", "استئصال جراحي — استئصال المعدة / الخثرة"],
+            ["-emia", "blood condition", "leukemia", "حالة دموية — ابيضاض الدم"],
+            ["-globin", "protein", "hemoglobin", "بروتين — هيموغلوبين"],
+            ["-gram", "record", "arthrogram", "سجل / تخطيط — تصوير المفصل"],
+            ["-ic", "pertaining to", "gastric", "متعلق بـ — معدي"],
+            ["-ism", "condition, process", "hyperthyroidism", "حالة / عملية — فرط نشاط الدرقية"],
+            ["-itis", "inflammation", "gastroenteritis, gingivitis", "التهاب — التهاب المعدة والأمعاء، التهاب اللثة"],
+            ["-logist", "specialist in the [study of]", "neurologist", "أخصائي في — أخصائي أعصاب"],
+            ["-megaly", "enlarged", "hepatomegaley (hepatomegaly)", "متضخم — تضخم الكبد"],
+            ["-logy", "study of", "nephrology", "دراسة / علم — علم الكلى"],
+            ["-oma", "tumor, mass", "hepatoma", "ورم / كتلة — ورم الكبد"],
+            ["-opsy", "to view", "biopsy", "للمشاهدة / الفحص — خزعة"],
+            ["-osis", "abnormal condition", "nephrosis", "حالة غير طبيعية — اعتلال كلوي"],
+            ["-scope", "instrument for examination", "gastroscope", "أداة للفحص — منظار المعدة"],
+            ["-scopy", "process for examination", "(e.g., gastroscopy)", "عملية الفحص بالمنظار"],
+            ["-tomy", "process of cutting into; incision", "tracheotomy", "شق / قطع داخل العضو — شق القصبة الهوائية"],
+            ["-stomy", "forming a new opening", "colostomy", "تكوين فتحة جديدة — فغر القولون"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u7p1_1",
+            q: "Distinguish between '-tomy', '-ectomy', and '-stomy' according to Slide 31:",
+            qAr: "ميّز بين اللواحق الثلاث (-tomy و -ectomy و -stomy) حسب شريحة 31:",
+            opts: [
+              "-tomy: incision | -ectomy: surgical removal | -stomy: forming a new opening",
+              "-tomy: surgical removal | -ectomy: new opening | -stomy: incision",
+              "-tomy: tumor | -ectomy: study of | -stomy: instrument",
+              "All three mean surgical removal"
+            ],
+            ans: 0,
+            exp: "-tomy تعني شق (incision)، و -ectomy تعني استئصال جراحي (surgical removal)، و -stomy تعني تكوين فتحة جديدة (forming a new opening)."
+          },
+          {
+            id: "q_u7p1_2",
+            q: "What is the difference between '-scope' and '-scopy'?",
+            qAr: "ما الفرق بين -scope و -scopy؟",
+            opts: [
+              "-scope is the process; -scopy is the instrument",
+              "-scope is the instrument for examination; -scopy is the process for examination",
+              "-scope means record; -scopy means tumor",
+              "There is no difference"
+            ],
+            ans: 1,
+            exp: "-scope تعني الأداة (instrument) مثل gastroscope، أما -scopy فتعني عملية الفحص نفسها (process)."
+          }
+        ]
+      },
+      {
+        id: "u7p2",
+        page: "Pages 32–35",
+        title: "البادئات الطبية الشائعة (14 بادئة)",
+        enBlocks: [
+          "Additional and reinforced commonly used prefixes with their meanings and medical terms (Slides 32–35)."
+        ],
+        ar: "البادئات الطبية الأكثر شيوعاً مع معانيها وأمثلتها الطبية (الشرائح 32 إلى 35).",
+        table: {
+          headers: ["Prefix", "Meaning", "Medical Term", "المعنى بالعربية"],
+          rows: [
+            ["Aut-", "self", "autopsy", "ذاتي — تشريح الجثة"],
+            ["Dia-", "complete, through", "diagnosis", "كامل / عبر — التشخيص"],
+            ["Dys-", "bad, painful, difficult", "dysentery", "سيء / مؤلم / صعب — الزحار"],
+            ["Endo-", "within", "endocrine glands", "داخل — الغدد الصماء"],
+            ["Exo-", "outside", "exocrine glands", "خارج — الغدد خارجية الإفراز"],
+            ["Hyper-", "excessive, more than normal, too much", "hyperglycemia", "مفرط / أكثر من الطبيعي — ارتفاع سكر الدم"],
+            ["Hypo-", "below, less than normal", "hypoglycemia", "تحت / أقل من الطبيعي — انخفاض سكر الدم"],
+            ["pro-", "before", "prognosis", "قبل — التنبؤ بسير المرض"],
+            ["Re-", "back", "resection", "للخلف / إعادة — استئصال جزئي"],
+            ["Retro-", "behind", "retrogastric", "خلف — خلف المعدة"],
+            ["Sub-", "below, under", "subhepatic", "تحت / أسفل — تحت الكبد"],
+            ["Trans-", "across, through", "transdermal", "عبر / خلال — عبر الجلد"],
+            ["Intra-", "within or inside", "intracellular", "داخل — داخل الخلية"],
+            ["Inter-", "Between or among", "intercellular", "بين — بين الخلايا"]
+          ]
+        },
+        mcqs: [
+          {
+            id: "q_u7p2_1",
+            q: "What is the difference between 'intracellular' and 'intercellular'?",
+            qAr: "ما الفرق بين intracellular و intercellular؟",
+            opts: [
+              "Intracellular means between cells; intercellular means within a cell",
+              "Intracellular means within/inside a cell; intercellular means between/among cells",
+              "Intracellular means across skin; intercellular means behind the stomach",
+              "Both mean outside the cell"
+            ],
+            ans: 1,
+            exp: "Intra- تعني داخل (within/inside) فـ intracellular داخل الخلية، بينما Inter- تعني بين (between/among) فـ intercellular بين الخلايا."
+          },
+          {
+            id: "q_u7p2_2",
+            q: "Which prefix means 'complete, through', as in 'diagnosis'?",
+            qAr: "أي بادئة تعني (كامل / عبر) كما في diagnosis؟",
+            opts: ["Aut-", "Dia-", "Re-", "Pro-"],
+            ans: 1,
+            exp: "البادئة Dia- تعني complete / through ومن أمثلتها diagnosis (التشخيص)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "u8",
+    num: 8,
+    titleAr: "مصطلحات الاتجاهات التشريحية والواجب المنزلي",
+    titleEn: "Directional Terms, Standard Anatomical Diagram & Homework",
+    pages: "Pages 36–39",
+    transition: "anim-depth-zoom",
+    paragraphs: [
+      {
+        id: "u8p1",
+        page: "Page 36",
+        title: "مصطلحات الاتجاهات (Directional Terms)",
+        enBlocks: [
+          "• Cranial, crani/o – toward the head",
+          "• Caudal, caud/o – toward the back or tail",
+          "• Dorsal, dors/o – near upper surface, back",
+          "• Ventral, ver/o – toward the bottom, front",
+          "• Posterior, poster/o – back, behind, after, toward the rear",
+          "• Anterior, anter/o – front, in front of"
+        ],
+        ar: "مصطلحات الاتجاهات التشريحية الأساسية (شريحة 36): Cranial (باتجاه الرأس)، Caudal (باتجاه الخلف أو الذيل)، Dorsal (قريب من السطح العلوي أو الظهر)، Ventral (باتجاه الأسفل أو الأمام)، Posterior (خلفي/وراء/باتجاه المؤخرة)، و Anterior (أمامي/في المقدمة).",
+        sourceNote: "ملاحظة مصدر (شريحة 36): وردت صيغة الربط لـ Ventral في الشريحة المصورة كـ ver/o (والصيغة القياسية في المصطلحات الطبية ventr/o).",
+        mcqs: [
+          {
+            id: "q_u8p1_1",
+            q: "Which directional term means 'toward the head'?",
+            qAr: "أي مصطلح اتجاهي يعني (باتجاه الرأس)؟",
+            opts: ["Caudal", "Cranial (crani/o)", "Posterior", "Ventral"],
+            ans: 1,
+            exp: "Cranial (crani/o) يعني باتجاه الرأس (toward the head)، وعكسه Caudal (باتجاه الخلف/الذيل)."
+          }
+        ]
+      },
+      {
+        id: "u8p2",
+        page: "Page 37",
+        title: "المخطط القياسي للمصطلحات التشريحية (Standard Anatomical Terms)",
+        enBlocks: [
+          "Visual anatomical reference showing Front View (Right, Left, Midline, Medial, Lateral, Proximal, Distal) and Side View (Superior, Inferior, Anterior/Ventral, Posterior/Dorsal, Proximal, Distal)."
+        ],
+        ar: "يمثل المخطط في شريحة 37 الاتجاهات التشريحية القياسية على جسم الإنسان من المنظور الأمامي (يمين، يسار، خط المنتصف Midline، إنسي Medial، جانبي Lateral، قريب Proximal، بعيد Distal) والمنظور الجانبي (علوي Superior، سفلي Inferior، أمامي/بطني Anterior/Ventral، خلفي/ظهري Posterior/Dorsal).",
+        diagram: "anatomy",
+        mcqs: [
+          {
+            id: "q_u8p2_1",
+            q: "According to the Standard Anatomical Terms diagram (Slide 37), 'Anterior' corresponds to which term in parentheses?",
+            qAr: "حسب مخطط شريحة 37، ما المصطلح المرادف لـ Anterior بين قوسين؟",
+            opts: ["Dorsal", "Ventral", "Proximal", "Lateral"],
+            ans: 1,
+            exp: "في مخطط شريحة 37: Anterior تقابلها (Ventral)، بينما Posterior تقابلها (Dorsal)."
+          }
+        ]
+      },
+      {
+        id: "u8p3",
+        page: "Pages 38–39",
+        title: "الواجب المنزلي (Homework) وخاتمة المحاضرة",
+        enBlocks: [
+          "Homework (Slide 38): Give the meaning of the following directional terms?",
+          "1- Midline | 2- Lateral | 3- Medial | 4- Superior | 5- Inferior | 6- Superficial | 7- Deep | 8- Proximal | 9- Distal",
+          "Slide 39: Thank You!"
+        ],
+        ar: "الواجب المنزلي (شريحة 38): أعطِ معنى مصطلحات الاتجاهات التسعة التالية: 1- خط المنتصف (Midline)، 2- جانبي (Lateral)، 3- إنسي/وسطي (Medial)، 4- علوي (Superior)، 5- سفلي (Inferior)، 6- سطحي (Superficial)، 7- عميق (Deep)، 8- قريب (Proximal)، 9- بعيد (Distal).",
+        homeworkHelper: [
+          ["1. Midline", "Imaginary vertical line dividing the body into equal right and left halves", "خط المنتصف العمودي الوهمي الذي يقسم الجسم لنصفين أيمن وأيسر"],
+          ["2. Lateral", "Away from the midline (toward the side)", "جانبي — بعيد عن خط المنتصف"],
+          ["3. Medial", "Toward the midline of the body", "إنسي/وسطي — قريب من خط المنتصف"],
+          ["4. Superior", "Above / toward the head (upper)", "علوي — باتجاه الأعلى"],
+          ["5. Inferior", "Below / toward the feet (lower)", "سفلي — باتجاه الأسفل"],
+          ["6. Superficial", "Near the surface of the body", "سطحي — قريب من سطح الجسم"],
+          ["7. Deep", "Away from the surface / internal", "عميق — بعيد عن السطح باتجاه الداخل"],
+          ["8. Proximal", "Closer to the point of attachment or trunk", "قريب — أقرب لنقطة اتصال الطرف بالجذع"],
+          ["9. Distal", "Farther from the point of attachment or trunk", "بعيد — أبعد عن نقطة اتصال الطرف بالجذع"]
+        ],
+        mcqs: [
+          {
+            id: "q_u8p3_1",
+            q: "On the anatomical diagram, which arrow points TOWARD the Midline?",
+            qAr: "في المخطط التشريحي، أي سهم يشير باتجاه خط المنتصف (Midline)؟",
+            opts: ["Lateral", "Medial", "Distal", "Inferior"],
+            ans: 1,
+            exp: "Medial يشير باتجاه خط المنتصف، بينما Lateral يشير بعيداً عنه."
+          }
+        ]
+      }
+    ]
+  }
+];
+
+/* =========================================================================
+   2. STATE & LOCALSTORAGE (SAFE TRY/CATCH)
+   ========================================================================= */
+const STORAGE_KEY = "medterm_l1_word_analysis_v1";
+const DEFAULT_STATE = {
+  completedUnits: [],
+  favorites: [],
+  mistakes: [], // [{id, unitId, q, qAr, opts, ans, exp}]
+  lastView: "home",
+  lastUnitId: "u1",
+  theme: "light",
+  fontScale: 1,
+  reducedMotion: false
+};
+
+let state = loadState();
+let currentView = "home";
+let currentUnitId = state.lastUnitId || "u1";
+let paragraphQuizState = {}; // keyed by paraId
+let activeExamState = null;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_STATE };
+    return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+  } catch (e) {
+    return { ...DEFAULT_STATE };
+  }
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {}
+}
+
+/* =========================================================================
+   3. HELPERS: TOAST, PARTICLES, RIPPLE, COPY, WORD TOKENIZER
+   ========================================================================= */
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+function spawnParticles(x, y, count = 14) {
+  if (document.documentElement.dataset.motion === "reduced") return;
+  const colors = ["#0f766e", "#2dd4bf", "#1d4ed8", "#f59e0b", "#16a34a"];
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("span");
+    p.className = "particle";
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+    const dist = 36 + Math.random() * 52;
+    p.style.left = x + "px";
+    p.style.top = y + "px";
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty("--tx", Math.cos(angle) * dist + "px");
+    p.style.setProperty("--ty", Math.sin(angle) * dist + "px");
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 700);
+  }
+}
+
+function attachRipple(e) {
+  const btn = e.target.closest(".btn");
+  if (!btn || document.documentElement.dataset.motion === "reduced") return;
+  const rect = btn.getBoundingClientRect();
+  const circle = document.createElement("span");
+  const d = Math.max(rect.width, rect.height);
+  circle.className = "ripple-circle";
+  circle.style.width = circle.style.height = d + "px";
+  circle.style.left = (e.clientX - rect.left - d / 2) + "px";
+  circle.style.top = (e.clientY - rect.top - d / 2) + "px";
+  btn.appendChild(circle);
+  setTimeout(() => circle.remove(), 550);
+}
+
+function copyTextSafe(text, btnEl) {
+  const done = () => {
+    showToast("تم نسخ النص بنجاح ✓");
+    if (btnEl) {
+      const orig = btnEl.innerHTML;
+      btnEl.innerHTML = `<svg class="svg-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg> تم النسخ`;
+      setTimeout(() => { btnEl.innerHTML = orig; }, 1600);
+    }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); cb(); } catch (e) { showToast("تعذر النسخ التلقائي"); }
+  ta.remove();
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
+
+/* Turn English text into clickable interactive words + highlighted key terms */
+function tokenizeEnglish(text) {
+  return escapeHtml(text).replace(/\b([A-Za-z]{2,})\b/g, (match) => {
+    const key = match.toLowerCase();
+    const entry = DICTIONARY[key];
+    if (entry && entry.cat !== "general") {
+      return `<span class="hl-term hl-${entry.cat}" data-word="${key}" tabindex="0" role="button" title="اضغط للترجمة">${match}</span>`;
+    }
+    return `<span class="w-tok" data-word="${key}">${match}</span>`;
+  });
+}
+
+/* =========================================================================
+   4. SVG DIAGRAMS (JIGSAW PUZZLE & STANDARD ANATOMICAL TERMS)
+   ========================================================================= */
+function renderDiagram(type) {
+  if (type === "jigsaw") {
+    return `
+      <div class="diagram-card">
+        <svg viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jigsaw Puzzle: Prefix + Combining Form + Suffix">
+          <g font-family="Inter, sans-serif" font-weight="700" text-anchor="middle">
+            <rect x="20" y="25" width="170" height="72" rx="14" fill="rgba(220,38,38,0.14)" stroke="#dc2626" stroke-width="2.5"/>
+            <circle cx="190" cy="61" r="14" fill="#fff" stroke="#dc2626" stroke-width="2.5"/>
+            <text x="102" y="58" fill="#b91c1c" font-size="18">Prefix</text>
+            <text x="102" y="78" fill="#64748b" font-size="12">البادئة (اختيارية)</text>
+
+            <rect x="215" y="25" width="210" height="72" rx="14" fill="rgba(22,163,74,0.14)" stroke="#16a34a" stroke-width="2.5"/>
+            <circle cx="425" cy="61" r="14" fill="#fff" stroke="#16a34a" stroke-width="2.5"/>
+            <text x="320" y="58" fill="#15803d" font-size="18">Combining Form</text>
+            <text x="320" y="78" fill="#64748b" font-size="12">الجذر + حرف الربط (o)</text>
+
+            <rect x="450" y="25" width="170" height="72" rx="14" fill="rgba(37,99,235,0.14)" stroke="#2563eb" stroke-width="2.5"/>
+            <text x="535" y="58" fill="#1d4ed8" font-size="18">Suffix</text>
+            <text x="535" y="78" fill="#64748b" font-size="12">اللاحقة (نهاية الكلمة)</text>
+          </g>
+        </svg>
+        <div class="diagram-caption">رسم توضيحي مطابق لشريحة 3: تركيب المصطلح الطبي كقطع أحجية (Prefix + Combining Form + Suffix)</div>
+      </div>`;
+  }
+  if (type === "anatomy") {
+    return `
+      <div class="diagram-card">
+        <svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Standard Anatomical Terms Diagram">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1d4ed8"/>
+            </marker>
+          </defs>
+          <!-- Front View -->
+          <g font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="currentColor">
+            <text x="175" y="22" text-anchor="middle" fill="#0f766e" font-size="15">Front View (المنظور الأمامي)</text>
+            <!-- Stylized Body Silhouette -->
+            <circle cx="175" cy="62" r="18" fill="var(--bg-subtle)" stroke="#64748b" stroke-width="2"/>
+            <path d="M142 90 Q175 84 208 90 L216 175 L198 175 L195 118 L195 190 L204 295 L182 295 L175 215 L168 295 L146 295 L155 190 L155 118 L152 175 L134 175 Z" fill="var(--bg-subtle)" stroke="#64748b" stroke-width="2"/>
+            <!-- Midline -->
+            <line x1="175" y1="78" x2="175" y2="230" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,5"/>
+            <text x="175" y="106" text-anchor="middle" fill="#0f766e" font-size="11">Midline</text>
+            <!-- Right / Left -->
+            <line x1="145" y1="62" x2="112" y2="62" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="105" y="66" text-anchor="end">Right</text>
+            <line x1="205" y1="62" x2="238" y2="62" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="245" y="66">Left</text>
+            <!-- Medial / Lateral -->
+            <line x1="138" y1="142" x2="168" y2="142" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="132" y="146" text-anchor="end">Medial</text>
+            <line x1="182" y1="160" x2="215" y2="160" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="220" y="164">Lateral</text>
+            <!-- Proximal / Distal -->
+            <line x1="234" y1="145" x2="234" y2="95" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="242" y="122">Proximal</text>
+            <line x1="114" y1="150" x2="114" y2="205" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="106" y="182" text-anchor="end">Distal</text>
+            <line x1="226" y1="292" x2="226" y2="238" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="234" y="270">Proximal</text>
+            <line x1="126" y1="235" x2="126" y2="292" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="118" y="270" text-anchor="end">Distal</text>
+          </g>
+
+          <!-- Side View -->
+          <g font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="currentColor">
+            <text x="510" y="22" text-anchor="middle" fill="#0f766e" font-size="15">Side View (المنظور الجانبي)</text>
+            <circle cx="500" cy="62" r="17" fill="var(--bg-subtle)" stroke="#64748b" stroke-width="2"/>
+            <path d="M488 84 L516 88 L522 178 L514 295 L492 295 L492 188 L484 155 Z" fill="var(--bg-subtle)" stroke="#64748b" stroke-width="2"/>
+            <!-- Anterior / Posterior -->
+            <line x1="478" y1="145" x2="418" y2="145" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="412" y="140" text-anchor="end">Anterior</text>
+            <text x="412" y="157" text-anchor="end" font-size="11" fill="#64748b">(Ventral)</text>
+
+            <line x1="528" y1="145" x2="588" y2="145" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="594" y="140">Posterior</text>
+            <text x="594" y="157" font-size="11" fill="#64748b">(Dorsal)</text>
+
+            <!-- Superior / Inferior -->
+            <line x1="638" y1="115" x2="638" y2="52" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="646" y="85">Superior</text>
+            <line x1="638" y1="140" x2="638" y2="205" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr)"/>
+            <text x="646" y="176">Inferior</text>
+          </g>
+        </svg>
+        <div class="diagram-caption">مخطط المصطلحات التشريحية القياسية (شريحة 37): الاتجاهات الأمامية والجانبية</div>
+      </div>`;
+  }
+  return "";
+}
+
+function renderDissectionCards() {
+  return `
+    <div class="dissection-grid">
+      <div class="dissection-row">
+        <span class="d-chip hl-root"><strong>HEMAT</strong><small>root (blood)</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-combining"><strong>O</strong><small>comb.vo.</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-suffix"><strong>LOGY</strong><small>suffix (study of)</small></span>
+        <span style="margin-inline-start:auto;font-weight:800;color:var(--brand-primary);">= HEMATOLOGY</span>
+      </div>
+      <div class="dissection-row">
+        <span class="d-chip hl-root"><strong>GASTR</strong><small>root (stomach)</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-combining"><strong>O</strong><small>comb.vo.</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-root"><strong>ENTER</strong><small>root (intestines)</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-combining"><strong>O</strong><small>comb.vo.</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-suffix"><strong>LOGY</strong><small>suffix (study of)</small></span>
+        <span style="margin-inline-start:auto;font-weight:800;color:var(--brand-primary);">= GASTROENTEROLOGY</span>
+      </div>
+      <div class="dissection-row">
+        <span class="d-chip hl-root"><strong>GASTR</strong><small>root (stomach)</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-combining"><strong>O</strong><small>comb. form</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-suffix"><strong>SCOPE</strong><small>suffix (instrument to visually examine)</small></span>
+        <span style="margin-inline-start:auto;font-weight:800;color:var(--brand-primary);">= GASTROSCOPE</span>
+      </div>
+      <div class="dissection-row">
+        <span class="d-chip hl-root"><strong>ENTER</strong><small>root (intestines)</small></span>
+        <span class="d-plus">/</span>
+        <span class="d-chip hl-suffix"><strong>itis</strong><small>suffix (inflammation)</small></span>
+        <span style="margin-inline-start:auto;font-weight:800;color:var(--brand-primary);">= ENTERITIS</span>
+      </div>
+    </div>`;
+}
+
+/* =========================================================================
+   5. NAVIGATION & SIDEBAR RENDERING
+   ========================================================================= */
+function updateSidebarAndBadges() {
+  const glossaryEntries = Object.entries(DICTIONARY).filter(([,v]) => v.cat !== "general");
+  document.getElementById("glossCountBadge").textContent = glossaryEntries.length;
+  document.getElementById("favCountBadge").textContent = state.favorites.length;
+  document.getElementById("mistakesCountBadge").textContent = state.mistakes.length;
+
+  const pct = Math.round((state.completedUnits.length / UNITS.length) * 100);
+  document.getElementById("sidebarProgressPct").textContent = pct + "%";
+  document.getElementById("sidebarProgressBar").style.width = pct + "%";
+
+  const unitsList = document.getElementById("unitsNavList");
+  unitsList.innerHTML = UNITS.map(u => {
+    const done = state.completedUnits.includes(u.id);
+    const active = currentView === "unit" && currentUnitId === u.id;
+    return `<li>
+      <button class="nav-item-btn ${active ? "active" : ""}" data-unit="${u.id}">
+        <span style="display:flex;align-items:center;gap:8px;min-width:0;">
+          ${done ? '<span class="nav-done-dot" title="مكتملة"></span>' : `<span class="nav-badge">${u.num}</span>`}
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u.titleAr}</span>
+        </span>
+        <span style="font-size:0.7rem;color:var(--text-muted);flex-shrink:0;">${u.pages.replace("Pages ","ص")}</span>
+      </button>
+    </li>`;
+  }).join("");
+
+  document.querySelectorAll("#mainNavList .nav-item-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === currentView);
+  });
+}
+
+function navigateTo(view, unitId = null, animClass = "anim-depth-zoom") {
+  currentView = view;
+  if (unitId) {
+    currentUnitId = unitId;
+    state.lastUnitId = unitId;
+  }
+  state.lastView = view;
+  saveState();
+  closeMobileSidebar();
+  hidePopover();
+  updateSidebarAndBadges();
+
+  const container = document.getElementById("viewContainer");
+  container.className = "view-container " + animClass;
+  if (view === "home") renderHome(container);
+  else if (view === "unit") renderUnit(container, currentUnitId);
+  else if (view === "glossary") renderGlossary(container, false);
+  else if (view === "favorites") renderGlossary(container, true);
+  else if (view === "review") renderReview(container);
+  else if (view === "exam") renderExamView(container, "all");
+  else if (view === "mistakes") renderMistakes(container);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  initScrollReveal();
+  initCardTilt();
+}
+
+/* =========================================================================
+   6. VIEW RENDERERS (HOME, UNIT, GLOSSARY, REVIEW, EXAM, MISTAKES)
+   ========================================================================= */
+function renderHome(container) {
+  const totalMcqs = UNITS.reduce((s, u) => s + u.paragraphs.reduce((ps, p) => ps + p.mcqs.length, 0), 0);
+  const glossCount = Object.values(DICTIONARY).filter(v => v.cat !== "general").length;
+  const pct = Math.round((state.completedUnits.length / UNITS.length) * 100);
+  const lastUnitObj = UNITS.find(u => u.id === state.lastUnitId) || UNITS[0];
+
+  container.innerHTML = `
+    <section class="hero-card reveal-item">
+      <div class="hero-inner">
+        <div class="hero-uni">${LECTURE_META.institutionAr}</div>
+        <h1 class="hero-title-en">${LECTURE_META.course} — ${LECTURE_META.title}</h1>
+        <p class="hero-title-ar">${LECTURE_META.titleAr} • ${LECTURE_META.lecturerAr} (${LECTURE_META.lecturer})</p>
+        <div class="hero-meta-grid">
+          <span class="meta-pill">📘 ${LECTURE_META.semester} • ${LECTURE_META.lectureNum}</span>
+          <span class="meta-pill">📄 ${LECTURE_META.pages} صفحة مستخرجة بالكامل</span>
+          <span class="meta-pill">🧩 ${UNITS.length} وحدات تعليمية</span>
+          <span class="meta-pill">✅ التقدم الحالي: ${pct}%</span>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-action="start-study">🚀 ابدأ الدراسة من الوحدة 1</button>
+          <button class="btn" data-action="resume-study">↩️ متابعة: ${lastUnitObj.titleAr}</button>
+          <button class="btn" data-view-jump="glossary">📖 قاموس المصطلحات</button>
+          <button class="btn" data-view-jump="exam">📝 الاختبار الشامل</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid reveal-item">
+      <div class="stat-card"><div class="stat-num">${UNITS.length}</div><div class="stat-label">وحدات تعليمية متتابعة</div></div>
+      <div class="stat-card"><div class="stat-num">${glossCount}</div><div class="stat-label">مصطلح في القاموس المحلي</div></div>
+      <div class="stat-card"><div class="stat-num">${totalMcqs}</div><div class="stat-label">سؤال MCQ تفاعلي</div></div>
+      <div class="stat-card"><div class="stat-num">${state.completedUnits.length}/${UNITS.length}</div><div class="stat-label">وحدات مكتملة</div></div>
+    </section>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <h2 style="margin:0;font-size:1.25rem;">خريطة وحدات المحاضرة</h2>
+      <span style="font-size:0.84rem;color:var(--text-muted);">اضغط على أي كلمة إنجليزية داخل المنصة لترجمتها فوراً</span>
+    </div>
+
+    <section class="units-grid">
+      ${UNITS.map(u => {
+        const done = state.completedUnits.includes(u.id);
+        return `
+        <article class="unit-preview-card tilt-card reveal-item">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+              <span class="unit-num-tag">الوحدة ${u.num} • ${u.pages}</span>
+              ${done ? '<span style="color:var(--success);font-size:0.8rem;font-weight:800;">✓ مكتملة</span>' : ''}
+            </div>
+            <h3 class="unit-card-title">${u.titleAr}</h3>
+            <p class="unit-card-en">${u.titleEn}</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border-color);">
+            <span style="font-size:0.8rem;color:var(--text-muted);">${u.paragraphs.length} فقرات تعليمية</span>
+            <button class="btn btn-secondary btn-sm" data-open-unit="${u.id}">دراسة الوحدة ←</button>
+          </div>
+        </article>`;
+      }).join("")}
+    </section>
+
+    <div class="paragraph-card reveal-item" style="margin-top:24px;">
+      <strong style="color:var(--brand-primary);">المرجع الأكاديمي المذكور في المحاضرة (شريحة 1):</strong>
+      <p style="margin:6px 0 0;direction:ltr;text-align:left;font-family:var(--font-en);font-size:0.88rem;color:var(--text-secondary);">${LECTURE_META.reference}</p>
+    </div>
+  `;
+}
+
+function renderUnit(container, unitId) {
+  const unitIdx = UNITS.findIndex(u => u.id === unitId);
+  const unit = UNITS[unitIdx] || UNITS[0];
+  const isDone = state.completedUnits.includes(unit.id);
+  const prevUnit = UNITS[unitIdx - 1];
+  const nextUnit = UNITS[unitIdx + 1];
+
+  container.innerHTML = `
+    <div class="unit-header reveal-item">
+      <div>
+        <span class="unit-num-tag">الوحدة ${unit.num} من ${UNITS.length} • ${unit.pages}</span>
+        <h1 class="unit-header-title">${unit.titleAr}</h1>
+        <div style="font-family:var(--font-en);direction:ltr;text-align:right;color:var(--text-muted);font-size:0.9rem;">${unit.titleEn}</div>
+      </div>
+      <div class="unit-header-controls secondary-ui">
+        <button class="btn btn-sm" id="toggleAllTransBtn">🌐 إظهار كل الترجمات</button>
+        <button class="btn btn-secondary btn-sm" id="unitQuizLaunchBtn">📝 اختبار الوحدة</button>
+        <button class="btn ${isDone ? "btn-primary" : "btn-sm"}" id="markUnitDoneBtn">${isDone ? "✓ وحدة مكتملة" : "تحديد كمكتملة"}</button>
+      </div>
+    </div>
+
+    ${unit.paragraphs.map((p, idx) => renderParagraphCard(unit, p, idx)).join("")}
+
+    <div id="unitQuizMount"></div>
+
+    <div class="unit-nav-bar">
+      ${prevUnit ? `<button class="btn" data-open-unit="${prevUnit.id}">→ الوحدة السابقة: ${prevUnit.titleAr}</button>` : `<span></span>`}
+      ${nextUnit ? `<button class="btn btn-primary" data-open-unit="${nextUnit.id}">الوحدة التالية: ${nextUnit.titleAr} ←</button>` : `<button class="btn btn-primary" data-view-jump="review">الانتقال إلى المراجعة النهائية ←</button>`}
+    </div>
+  `;
+}
+
+function renderParagraphCard(unit, p, idx) {
+  const tableHtml = p.table ? `
+    <div class="table-scroll">
+      <table class="acad-table">
+        <thead><tr>${p.table.headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
+        <tbody>
+          ${p.table.rows.map(row => `<tr>${row.map((cell, ci) =>
+            ci === row.length - 1
+              ? `<td class="ar-col">${escapeHtml(cell)}</td>`
+              : `<td>${tokenizeEnglish(cell)}</td>`
+          ).join("")}</tr>`).join("")}
+        </tbody>
+      </table>
+    </div>` : "";
+
+  const hwHtml = p.homeworkHelper ? `
+    <div style="margin-top:14px;">
+      <button class="btn btn-secondary btn-sm" data-toggle-hw="${p.id}">💡 إظهار/إخفاء الشرح المساعد لحل الواجب (محتوى مساعد)</button>
+      <div class="translation-wrapper" id="hw_${p.id}">
+        <div class="translation-inner">
+          <div class="source-note" style="margin-bottom:8px;">ملاحظة: الجدول التالي شرح مساعد لإجابة الواجب المنزلي في شريحة 38 وليس نصاً مكتوباً داخل الشريحة نفسها.</div>
+          <div class="table-scroll">
+            <table class="acad-table">
+              <thead><tr><th>Term</th><th>Standard Meaning (Helper)</th><th>الشرح بالعربية</th></tr></thead>
+              <tbody>
+                ${p.homeworkHelper.map(r => `<tr><td>${tokenizeEnglish(r[0])}</td><td>${tokenizeEnglish(r[1])}</td><td class="ar-col">${escapeHtml(r[2])}</td></tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>` : "";
+
+  return `
+    <article class="paragraph-card reveal-item" id="para_${p.id}">
+      <div class="para-top">
+        <div class="para-title-wrap">
+          <span class="page-pill">${p.page}</span>
+          <h2 class="para-heading">${idx + 1}. ${p.title}</h2>
+        </div>
+        <div class="para-tools secondary-ui">
+          <button class="btn btn-sm" data-toggle-trans="${p.id}">🌐 ترجمة الفقرة</button>
+          <button class="btn btn-sm" data-copy-para="${p.id}" title="نسخ النص الأصلي">📋 نسخ</button>
+          <button class="btn btn-secondary btn-sm" data-toggle-mcq="${p.id}">✅ Test Your Understanding (${p.mcqs.length})</button>
+        </div>
+      </div>
+
+      <div class="original-box">
+        <span class="original-label">Original Text (اضغط على أي كلمة للترجمة الفورية)</span>
+        ${p.enBlocks.map(b => `<p style="margin:0 0 8px;">${tokenizeEnglish(b)}</p>`).join("")}
+      </div>
+
+      ${p.diagram ? renderDiagram(p.diagram) : ""}
+      ${p.dissection ? renderDissectionCards() : ""}
+      ${tableHtml}
+      ${hwHtml}
+
+      <div class="translation-wrapper" id="trans_${p.id}">
+        <div class="translation-inner">
+          <div class="translation-box">
+            <span class="translation-label">الترجمة العربية الدقيقة</span>
+            <div>${escapeHtml(p.ar)}</div>
+            <div style="margin-top:8px;">
+              <button class="btn btn-sm secondary-ui" data-copy-ar="${p.id}">📋 نسخ الترجمة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      ${p.sourceNote ? `<div class="source-note">📌 ${escapeHtml(p.sourceNote)}</div>` : ""}
+
+      <div id="mcq_mount_${p.id}"></div>
+    </article>`;
+}
+
+/* =========================================================================
+   7. PER-PARAGRAPH MCQ ENGINE
+   ========================================================================= */
+function toggleParagraphMcq(paraId) {
+  const mount = document.getElementById("mcq_mount_" + paraId);
+  if (!mount) return;
+  if (mount.innerHTML.trim() !== "") {
+    mount.innerHTML = "";
+    return;
+  }
+  const para = findParagraph(paraId);
+  if (!para) return;
+  paragraphQuizState[paraId] = { index: 0, correct: 0, wrong: 0, answered: false, chosen: null };
+  renderParagraphMcqStep(paraId);
+}
+
+function renderParagraphMcqStep(paraId) {
+  const mount = document.getElementById("mcq_mount_" + paraId);
+  const para = findParagraph(paraId);
+  const st = paragraphQuizState[paraId];
+  if (!mount || !para || !st) return;
+
+  if (st.index >= para.mcqs.length) {
+    const pct = Math.round((st.correct / para.mcqs.length) * 100);
+    mount.innerHTML = `
+      <div class="mcq-drawer">
+        <h3 style="margin-top:0;color:var(--brand-primary);">🎉 انتهيت من اختبار هذه الفقرة!</h3>
+        <p style="margin:6px 0 14px;">النتيجة: <strong>${st.correct} من ${para.mcqs.length}</strong> (${pct}%) — صحيحة: ${st.correct} | خاطئة: ${st.wrong}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" data-retry-para="${paraId}">🔄 إعادة المحاولة</button>
+          <button class="btn btn-sm" data-close-para-mcq="${paraId}">إغلاق الاختبار</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const q = para.mcqs[st.index];
+  mount.innerHTML = `
+    <div class="mcq-drawer">
+      <div class="mcq-header">
+        <span>Test Your Understanding — سؤال ${st.index + 1} من ${para.mcqs.length}</span>
+        <span>الصحيحة: ${st.correct}</span>
+      </div>
+      <p class="mcq-q-text">${tokenizeEnglish(q.q)}</p>
+      <p class="mcq-q-ar">${escapeHtml(q.qAr)}</p>
+      <div class="mcq-options">
+        ${q.opts.map((opt, oi) => {
+          let cls = "mcq-opt";
+          let icon = "";
+          if (st.answered) {
+            if (oi === q.ans) { cls += " correct"; icon = " ✓"; }
+            else if (oi === st.chosen) { cls += " wrong"; icon = " ✕"; }
+          }
+          return `<button class="${cls}" data-para-ans="${paraId}" data-opt="${oi}" ${st.answered ? "disabled" : ""}>
+            <span>${String.fromCharCode(65 + oi)}. ${escapeHtml(opt)}</span>
+            <strong>${icon}</strong>
+          </button>`;
+        }).join("")}
+      </div>
+      ${st.answered ? `
+        <div class="mcq-feedback ${st.chosen === q.ans ? "ok" : "bad"}">
+          <strong>${st.chosen === q.ans ? "✓ إجابة صحيحة!" : "✕ إجابة خاطئة — الإجابة الصحيحة هي (" + String.fromCharCode(65 + q.ans) + ")."}</strong><br>
+          ${escapeHtml(q.exp)}
+        </div>
+        <div class="mcq-footer">
+          <button class="btn btn-sm" data-retry-para="${paraId}">🔄 إعادة</button>
+          <button class="btn btn-primary btn-sm" data-next-para="${paraId}">${st.index + 1 < para.mcqs.length ? "السؤال التالي ←" : "عرض النتيجة ←"}</button>
+        </div>` : ""}
+    </div>`;
+}
+
+function handleParagraphAnswer(paraId, optIdx, btnEl) {
+  const st = paragraphQuizState[paraId];
+  const para = findParagraph(paraId);
+  if (!st || !para || st.answered) return;
+  const q = para.mcqs[st.index];
+  st.answered = true;
+  st.chosen = optIdx;
+  if (optIdx === q.ans) {
+    st.correct++;
+    removeMistake(q.id);
+    const rect = btnEl.getBoundingClientRect();
+    spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 10);
+  } else {
+    st.wrong++;
+    recordMistake(q, para.unitId);
+  }
+  renderParagraphMcqStep(paraId);
+  if (optIdx !== q.ans) {
+    const wrongBtn = document.querySelector(`#mcq_mount_${paraId} .mcq-opt.wrong`);
+    if (wrongBtn) wrongBtn.classList.add("shake-error");
+  }
+}
+
+/* =========================================================================
+   8. GLOSSARY & FAVORITES VIEW
+   ========================================================================= */
+function renderGlossary(container, favoritesOnly) {
+  const allTerms = Object.entries(DICTIONARY)
+    .filter(([,v]) => v.cat !== "general")
+    .map(([k, v]) => ({ key: k, ...v }));
+
+  container.innerHTML = `
+    <div class="unit-header reveal-item">
+      <div>
+        <span class="unit-num-tag">${favoritesOnly ? "المفضلة المحفوظة" : "Glossary | قاموس المصطلحات"}</span>
+        <h1 class="unit-header-title">${favoritesOnly ? "⭐ المصطلحات المحفوظة للمراجعة" : "📖 قاموس مصطلحات المحاضرة الشامل"}</h1>
+        <p style="margin:4px 0 0;color:var(--text-muted);font-size:0.9rem;">جميع البادئات والجذور واللواحق والمصطلحات الطبية المستخرجة من الشرائح (يعمل بدون إنترنت).</p>
+      </div>
+    </div>
+
+    <div class="filter-bar reveal-item">
+      <input type="search" class="search-input" id="glossSearchInput" placeholder="ابحث بالإنكليزية أو العربية...">
+      <select class="search-input" id="glossCatFilter" style="flex:0 1 200px;">
+        <option value="all">كل التصنيفات</option>
+        <option value="prefix">البادئات (Prefixes)</option>
+        <option value="root">الجذور (Roots)</option>
+        <option value="suffix">اللواحق (Suffixes)</option>
+        <option value="combining">صيغ الربط</option>
+        <option value="medical">مصطلحات طبية</option>
+        <option value="directional">مصطلحات اتجاهية</option>
+      </select>
+      <select class="search-input" id="glossSort" style="flex:0 1 170px;">
+        <option value="order">ترتيب المحاضرة</option>
+        <option value="alpha">ترتيب أبجدي A-Z</option>
+      </select>
+    </div>
+
+    <div class="glossary-grid" id="glossaryGrid"></div>
+  `;
+
+  const renderGrid = () => {
+    const q = (document.getElementById("glossSearchInput").value || "").trim().toLowerCase();
+    const cat = document.getElementById("glossCatFilter").value;
+    const sort = document.getElementById("glossSort").value;
+
+    let list = allTerms.filter(t => {
+      if (favoritesOnly && !state.favorites.includes(t.key)) return false;
+      if (cat !== "all" && t.cat !== cat) return false;
+      if (q && !(t.key.includes(q) || t.ar.toLowerCase().includes(q) || t.ctx.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    if (sort === "alpha") list.sort((a, b) => a.key.localeCompare(b.key));
+
+    const grid = document.getElementById("glossaryGrid");
+    if (!list.length) {
+      grid.innerHTML = `<div class="paragraph-card" style="grid-column:1/-1;text-align:center;">
+        <p style="margin:0;color:var(--text-muted);">${favoritesOnly ? "لم تحفظ أي مصطلح في المفضلة بعد. اضغط على أي مصطلح أثناء الدراسة واحفظه هنا!" : "لا توجد مصطلحات مطابقة لبحثك."}</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(t => {
+      const fav = state.favorites.includes(t.key);
+      return `
+        <article class="gloss-card">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+              <span class="hl-term hl-${t.cat}" style="border-bottom:none;font-family:var(--font-en);font-size:1rem;">${t.key}</span>
+              <button class="btn btn-icon btn-sm ${fav ? "active-toggle" : ""}" data-toggle-fav="${t.key}" title="حفظ في المفضلة">${fav ? "★" : "☆"}</button>
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">${t.catAr}</div>
+            <div style="font-weight:800;margin:6px 0 4px;">${t.ar}</div>
+            <div style="font-size:0.84rem;color:var(--text-secondary);">${t.ctx}</div>
+          </div>
+          ${t.ex ? `<div class="pop-ex" style="margin:6px 0 0;">${escapeHtml(t.ex)}</div>` : ""}
+        </article>`;
+    }).join("");
+  };
+
+  document.getElementById("glossSearchInput").addEventListener("input", renderGrid);
+  document.getElementById("glossCatFilter").addEventListener("change", renderGrid);
+  document.getElementById("glossSort").addEventListener("change", renderGrid);
+  renderGrid();
+}
+
+/* =========================================================================
+   9. FINAL REVIEW SECTION (WITH 3D FLIP FLASHCARDS)
+   ========================================================================= */
+function renderReview(container) {
+  const flashcards = [
+    ["Prefix (البادئة)", "توضع في بداية الكلمة وتدل على الزمن، الموقع، النفي، القياس، أو العدد."],
+    ["Word Root (جذر الكلمة)", "الأساس الجوهري للمصطلح؛ يدل على عضو أو لون. كل مصطلح له جذر واحد على الأقل."],
+    ["Combining Vowel (/O/)", "يصل الجذر بلاحقة تبدأ بساكن أو بجذر آخر. لا ينطبق على البادئات ويُحذف قبل العلة."],
+    ["Suffix (اللاحقة)", "توضع في نهاية الكلمة وتدل على إجراء، حالة، اضطراب، أو مرض."],
+    ["Greek vs. Latin (Kidney)", "اليوناني: -nephr- (nephrotomy) | اللاتيني: -ren- (renal)."],
+    ["Greek vs. Latin (Uterus)", "اليوناني: -hyster- (hysterectomy) | اللاتيني: -uter- (uterus)."],
+    ["-tomy / -ectomy / -stomy", "-tomy: شق | -ectomy: استئصال جراحي | -stomy: فتح فتحة جديدة."],
+    ["-scope vs. -scopy", "-scope: أداة الفحص | -scopy: عملية الفحص بالمنظار."],
+    ["Anterior vs. Posterior", "Anterior (Ventral): أمامي | Posterior (Dorsal): خلفي."],
+    ["Proximal vs. Distal", "Proximal: أقرب للجذع | Distal: أبعد عن الجذع."]
+  ];
+
+  container.innerHTML = `
+    <div class="unit-header reveal-item">
+      <div>
+        <span class="unit-num-tag">المراجعة النهائية الشاملة</span>
+        <h1 class="unit-header-title">🧠 ملخص محاضرة Word Analysis وبطاقات الحفظ</h1>
+      </div>
+      <button class="btn btn-primary" data-view-jump="exam">ابدأ الاختبار الشامل ←</button>
+    </div>
+
+    <section class="paragraph-card reveal-item">
+      <h2 style="margin-top:0;font-size:1.1rem;">🃏 بطاقات مراجعة ثلاثية الأبعاد (اضغط على البطاقة لقلبها)</h2>
+      <div class="flashcard-grid">
+        ${flashcards.map(([front, back]) => `
+          <div class="flip-card" tabindex="0" role="button" aria-label="اقلب البطاقة">
+            <div class="flip-inner">
+              <div class="flip-face">
+                <strong style="color:var(--brand-primary);font-size:1rem;">${front}</strong>
+                <span style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">اضغط للقلب ↻</span>
+              </div>
+              <div class="flip-face flip-back">
+                <div style="font-size:0.86rem;font-weight:700;">${back}</div>
+              </div>
+            </div>
+          </div>`).join("")}
+      </div>
+    </section>
+
+    <section class="paragraph-card reveal-item">
+      <h2 style="margin-top:0;font-size:1.1rem;">📌 القواعد الذهبية الأربع من شريحة 21</h2>
+      <ol style="margin:0;padding-right:20px;line-height:2;">
+        <li>جميع المصطلحات الطبية تحتوي على <strong>جذر واحد على الأقل</strong> (at least one word root).</li>
+        <li>ليس لكل المصطلحات الطبية بادئة أو لاحقة أو حرف ربط.</li>
+        <li>يُستخدم حرف الربط (<code>o</code>) لربط جذرين معاً، أو لربط جذر بلاحقة تبدأ بحرف ساكن (والبادئات غير مشمولة بهذه القاعدة).</li>
+        <li>إذا بدأت اللاحقة بحرف علة، يُحذف حرف الربط (مثل <code>arthritis</code> و <code>enteritis</code> و <code>gastrectomy</code>).</li>
+      </ol>
+    </section>
+  `;
+}
+
+/* =========================================================================
+   10. COMPREHENSIVE EXAM & UNIT QUIZ ENGINE
+   ========================================================================= */
+function renderExamView(container, scopeUnitId) {
+  const questions = [];
+  UNITS.forEach(u => {
+    if (scopeUnitId !== "all" && u.id !== scopeUnitId) return;
+    u.paragraphs.forEach(p => {
+      p.mcqs.forEach(m => questions.push({ ...m, unitId: u.id, unitTitle: u.titleAr }));
+    });
+  });
+
+  activeExamState = {
+    scope: scopeUnitId,
+    questions,
+    index: 0,
+    correct: 0,
+    wrongItems: [],
+    answered: false,
+    chosen: null
+  };
+  renderExamStep(container);
+}
+
+function renderExamStep(container) {
+  const ex = activeExamState;
+  if (!ex) return;
+
+  if (ex.index >= ex.questions.length) {
+    const total = ex.questions.length;
+    const pct = total ? Math.round((ex.correct / total) * 100) : 0;
+    const weakUnitIds = [...new Set(ex.wrongItems.map(w => w.unitId))];
+
+    container.innerHTML = `
+      <div class="paragraph-card reveal-item" style="text-align:center;">
+        <span class="unit-num-tag">نتيجة الاختبار</span>
+        <h1 style="margin:10px 0 4px;font-size:2rem;color:var(--brand-primary);">${pct}%</h1>
+        <p style="margin:0 0 18px;font-size:1.05rem;">أجبت بشكل صحيح على <strong>${ex.correct}</strong> من أصل <strong>${total}</strong> سؤال (أخطاء: ${ex.wrongItems.length})</p>
+        <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+          <button class="btn btn-primary" id="retryExamBtn">🔄 إعادة الاختبار</button>
+          <button class="btn" data-view-jump="mistakes">🎯 مراجعة الأخطاء</button>
+          <button class="btn" data-view-jump="home">🏠 الرئيسية</button>
+        </div>
+
+        ${weakUnitIds.length ? `
+          <div style="text-align:right;background:var(--warning-bg);padding:16px;border-radius:14px;margin-bottom:18px;">
+            <strong style="color:var(--warning);">📌 وحدات يُنصح بمراجعتها بناءً على إجاباتك:</strong>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+              ${weakUnitIds.map(uid => {
+                const u = UNITS.find(x => x.id === uid);
+                return u ? `<button class="btn btn-sm" data-open-unit="${u.id}">مراجعة الوحدة ${u.num}: ${u.titleAr}</button>` : "";
+              }).join("")}
+            </div>
+          </div>` : `<div style="background:var(--success-bg);color:var(--success);padding:14px;border-radius:12px;font-weight:700;">ممتاز! أتقنت جميع الأسئلة دون أخطاء.</div>`}
+
+        ${ex.wrongItems.length ? `
+          <div style="text-align:right;margin-top:16px;">
+            <h3>تفاصيل الأسئلة التي أخطأت فيها:</h3>
+            ${ex.wrongItems.map(w => `
+              <div class="mcq-drawer" style="margin-bottom:12px;">
+                <p class="mcq-q-text">${escapeHtml(w.q)}</p>
+                <p style="margin:4px 0;color:var(--success);font-weight:700;">✓ الإجابة الصحيحة: ${escapeHtml(w.opts[w.ans])}</p>
+                <p style="margin:4px 0;font-size:0.86rem;color:var(--text-secondary);">${escapeHtml(w.exp)}</p>
+              </div>`).join("")}
+          </div>` : ""}
+      </div>`;
+    if (pct >= 70) spawnParticles(window.innerWidth / 2, window.innerHeight / 3, 22);
+    return;
+  }
+
+  const q = ex.questions[ex.index];
+  const pctDone = Math.round((ex.index / ex.questions.length) * 100);
+
+  container.innerHTML = `
+    <div class="unit-header reveal-item">
+      <div>
+        <span class="unit-num-tag">${ex.scope === "all" ? "الاختبار الشامل للمحاضرة" : "اختبار الوحدة"} • سؤال ${ex.index + 1} من ${ex.questions.length}</span>
+        <h2 class="unit-header-title" style="font-size:1.2rem;">${q.unitTitle}</h2>
+      </div>
+      <div style="min-width:140px;">
+        <div style="font-size:0.78rem;margin-bottom:4px;">التقدم: ${pctDone}%</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pctDone}%"></div></div>
+      </div>
+    </div>
+
+    <div class="paragraph-card">
+      <p class="mcq-q-text">${tokenizeEnglish(q.q)}</p>
+      <p class="mcq-q-ar">${escapeHtml(q.qAr)}</p>
+      <div class="mcq-options">
+        ${q.opts.map((opt, oi) => {
+          let cls = "mcq-opt";
+          let icon = "";
+          if (ex.answered) {
+            if (oi === q.ans) { cls += " correct"; icon = " ✓"; }
+            else if (oi === ex.chosen) { cls += " wrong"; icon = " ✕"; }
+          }
+          return `<button class="${cls}" data-exam-opt="${oi}" ${ex.answered ? "disabled" : ""}>
+            <span>${String.fromCharCode(65 + oi)}. ${escapeHtml(opt)}</span>
+            <strong>${icon}</strong>
+          </button>`;
+        }).join("")}
+      </div>
+      ${ex.answered ? `
+        <div class="mcq-feedback ${ex.chosen === q.ans ? "ok" : "bad"}">
+          <strong>${ex.chosen === q.ans ? "✓ إجابة صحيحة!" : "✕ إجابة خاطئة — الصحيحة هي (" + String.fromCharCode(65 + q.ans) + ")."}</strong><br>
+          ${escapeHtml(q.exp)}
+        </div>
+        <div class="mcq-footer">
+          <span>النقاط الحالية: ${ex.correct} / ${ex.index + 1}</span>
+          <button class="btn btn-primary" id="nextExamQBtn">${ex.index + 1 < ex.questions.length ? "السؤال التالي ←" : "عرض النتيجة النهائية ←"}</button>
+        </div>` : ""}
+    </div>`;
+}
+
+/* =========================================================================
+   11. MISTAKES REVIEW VIEW
+   ========================================================================= */
+function recordMistake(q, unitId) {
+  if (!state.mistakes.some(m => m.id === q.id)) {
+    state.mistakes.push({ id: q.id, unitId, q: q.q, qAr: q.qAr, opts: q.opts, ans: q.ans, exp: q.exp });
+    saveState();
+    updateSidebarAndBadges();
+  }
+}
+function removeMistake(qId) {
+  const before = state.mistakes.length;
+  state.mistakes = state.mistakes.filter(m => m.id !== qId);
+  if (state.mistakes.length !== before) {
+    saveState();
+    updateSidebarAndBadges();
+  }
+}
+
+function renderMistakes(container) {
+  container.innerHTML = `
+    <div class="unit-header reveal-item">
+      <div>
+        <span class="unit-num-tag">مراجعة الأخطاء</span>
+        <h1 class="unit-header-title">🎯 الأسئلة التي أخطأت فيها سابقاً (${state.mistakes.length})</h1>
+      </div>
+      ${state.mistakes.length ? `<button class="btn btn-danger btn-sm" id="clearMistakesBtn">مسح قائمة الأخطاء</button>` : ""}
+    </div>
+    ${!state.mistakes.length ? `
+      <div class="paragraph-card" style="text-align:center;">
+        <p style="margin:0;color:var(--text-muted);">لا توجد أخطاء مسجلة حالياً! أي سؤال تخطئ فيه في اختبارات الفقرات أو الاختبار الشامل سيظهر هنا لتراجعه بسهولة.</p>
+      </div>` :
+      state.mistakes.map(m => {
+        const u = UNITS.find(x => x.id === m.unitId);
+        return `
+        <article class="paragraph-card reveal-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;">
+            <span class="page-pill">${u ? "الوحدة " + u.num + ": " + u.titleAr : ""}</span>
+            <button class="btn btn-sm" data-clear-one-mistake="${m.id}">✓ تم الاستيعاب</button>
+          </div>
+          <p class="mcq-q-text">${escapeHtml(m.q)}</p>
+          <p class="mcq-q-ar">${escapeHtml(m.qAr)}</p>
+          <div class="mcq-feedback ok">
+            <strong>الإجابة الصحيحة:</strong> ${escapeHtml(m.opts[m.ans])}<br>
+            ${escapeHtml(m.exp)}
+          </div>
+        </article>`;
+      }).join("")}`;
+}
+
+/* =========================================================================
+   12. WORD POPOVER & GLOBAL SEARCH
+   ========================================================================= */
+let activePopoverWord = null;
+function showWordPopover(wordKey, targetEl) {
+  const clean = wordKey.toLowerCase().replace(/[^a-z-]/g, "");
+  const entry = DICTIONARY[clean] || DICTIONARY[clean.replace(/s$/, "")] || DICTIONARY[clean.replace(/es$/, "")];
+  activePopoverWord = clean;
+
+  document.getElementById("popWord").textContent = targetEl.textContent.trim();
+  const favBtn = document.getElementById("popFavBtn");
+
+  if (entry) {
+    document.getElementById("popCat").textContent = entry.catAr;
+    document.getElementById("popAr").textContent = entry.ar;
+    document.getElementById("popCtx").textContent = entry.ctx;
+    const exEl = document.getElementById("popEx");
+    if (entry.ex) { exEl.style.display = "block"; exEl.textContent = "Example: " + entry.ex; }
+    else exEl.style.display = "none";
+    favBtn.style.display = entry.cat !== "general" ? "inline-flex" : "none";
+    const isFav = state.favorites.includes(clean);
+    favBtn.textContent = isFav ? "★ محفوظ في المفضلة" : "⭐ حفظ في المفضلة";
+  } else {
+    document.getElementById("popCat").textContent = "كلمة غير مدرجة";
+    document.getElementById("popAr").textContent = "لا تتوفر ترجمة محلية لهذه الكلمة";
+    document.getElementById("popCtx").textContent = "القاموس المحلي يغطي جميع المصطلحات الطبية والكلمات الأساسية في المحاضرة دون إنترنت. يمكنك استخدام زر ترجمة الفقرة لقراءة المعنى السياقي الكامل.";
+    document.getElementById("popEx").style.display = "none";
+    favBtn.style.display = "none";
+  }
+
+  const pop = document.getElementById("wordPopover");
+  pop.classList.add("visible");
+  const rect = targetEl.getBoundingClientRect();
+  const popW = Math.min(330, window.innerWidth - 24);
+  let left = rect.left;
+  if (left + popW > window.innerWidth - 12) left = window.innerWidth - popW - 12;
+  if (left < 12) left = 12;
+  let top = rect.bottom + 8;
+  if (top + 230 > window.innerHeight) top = Math.max(12, rect.top - 220);
+  pop.style.left = left + "px";
+  pop.style.top = top + "px";
+}
+function hidePopover() {
+  document.getElementById("wordPopover").classList.remove("visible");
+}
+
+function runGlobalSearch(query) {
+  const out = document.getElementById("globalSearchResults");
+  const q = query.trim().toLowerCase();
+  if (!q) {
+    out.innerHTML = `<p style="color:var(--text-muted);font-size:0.88rem;text-align:center;">اكتب كلمة للبحث في العناوين والفقرات والجداول والقاموس.</p>`;
+    return;
+  }
+  const hits = [];
+  UNITS.forEach(u => {
+    u.paragraphs.forEach(p => {
+      const hay = (p.title + " " + p.enBlocks.join(" ") + " " + p.ar + " " + (p.table ? p.table.rows.flat().join(" ") : "")).toLowerCase();
+      if (hay.includes(q)) {
+        hits.push({ unitId: u.id, paraId: p.id, title: `الوحدة ${u.num}: ${p.title}`, sub: p.page + " — " + p.ar.slice(0, 95) + "..." });
+      }
+    });
+  });
+
+  if (!hits.length) {
+    out.innerHTML = `<p style="color:var(--text-muted);text-align:center;">لم يتم العثور على نتائج مطابقة لـ "${escapeHtml(query)}".</p>`;
+    return;
+  }
+  out.innerHTML = hits.map(h => `
+    <button class="search-result-item" data-jump-unit="${h.unitId}" data-jump-para="${h.paraId}">
+      <strong style="color:var(--brand-primary);display:block;">${escapeHtml(h.title)}</strong>
+      <span style="font-size:0.82rem;color:var(--text-secondary);">${escapeHtml(h.sub)}</span>
+    </button>`).join("");
+}
+
+/* =========================================================================
+   13. MOTION ENGINE (SCROLL REVEAL, 3D CARD TILT, PROGRESS BAR)
+   ========================================================================= */
+function initScrollReveal() {
+  const items = document.querySelectorAll(".reveal-item");
+  if (!("IntersectionObserver" in window) || document.documentElement.dataset.motion === "reduced") {
+    items.forEach(el => el.classList.add("is-visible"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  items.forEach(el => io.observe(el));
+}
+
+function initCardTilt() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  if (document.documentElement.dataset.motion === "reduced") return;
+  document.querySelectorAll(".tilt-card").forEach(card => {
+    card.addEventListener("mousemove", e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(700px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-3px)`;
+    });
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "";
+    });
+  });
+}
+
+function findParagraph(paraId) {
+  for (const u of UNITS) {
+    for (const p of u.paragraphs) {
+      if (p.id === paraId) return { ...p, unitId: u.id };
+    }
+  }
+  return null;
+}
+
+/* =========================================================================
+   14. THEME, SETTINGS, SIDEBAR & EVENT DELEGATION
+   ========================================================================= */
+function applyPreferences() {
+  document.documentElement.dataset.theme = state.theme;
+  document.documentElement.style.setProperty("--font-scale", state.fontScale);
+  document.documentElement.dataset.motion = state.reducedMotion ? "reduced" : "full";
+  document.getElementById("toggleMotionBtn").textContent = state.reducedMotion ? "تقليل الحركة مفعّل" : "الحركة الكاملة مفعّلة";
+}
+
+function closeMobileSidebar() {
+  document.getElementById("sidebar").classList.remove("mobile-open");
+  document.getElementById("sidebarBackdrop").classList.remove("mobile-open");
+  document.getElementById("mobileMenuBtn").classList.remove("open");
+}
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+/* Event Listeners */
+document.addEventListener("click", (e) => {
+  attachRipple(e);
+
+  // Close popover if clicking outside
+  if (!e.target.closest("#wordPopover") && !e.target.closest(".w-tok") && !e.target.closest(".hl-term")) {
+    hidePopover();
+  }
+
+  // Word Click-to-Translate (don't trigger when user is selecting text to copy)
+  const wordEl = e.target.closest(".w-tok, .hl-term");
+  if (wordEl && wordEl.dataset.word) {
+    const sel = window.getSelection ? window.getSelection().toString() : "";
+    if (!sel) {
+      showWordPopover(wordEl.dataset.word, wordEl);
+      return;
+    }
+  }
+
+  // Sidebar Main Views
+  const mainNav = e.target.closest("#mainNavList .nav-item-btn");
+  if (mainNav) {
+    const anims = { home: "anim-depth-zoom", glossary: "anim-blur-focus", favorites: "anim-blur-focus", review: "anim-perspective-tunnel", exam: "anim-circular-reveal", mistakes: "anim-directional-wipe" };
+    navigateTo(mainNav.dataset.view, null, anims[mainNav.dataset.view] || "anim-depth-zoom");
+    return;
+  }
+
+  // Sidebar Unit Click
+  const unitNav = e.target.closest("#unitsNavList .nav-item-btn");
+  if (unitNav) {
+    const u = UNITS.find(x => x.id === unitNav.dataset.unit);
+    navigateTo("unit", unitNav.dataset.unit, u ? u.transition : "anim-directional-wipe");
+    return;
+  }
+
+  // Open Unit buttons
+  const openUnitBtn = e.target.closest("[data-open-unit]");
+  if (openUnitBtn) {
+    const u = UNITS.find(x => x.id === openUnitBtn.dataset.openUnit);
+    navigateTo("unit", openUnitBtn.dataset.openUnit, u ? u.transition : "anim-directional-wipe");
+    return;
+  }
+
+  // View Jump buttons
+  const viewJump = e.target.closest("[data-view-jump]");
+  if (viewJump) {
+    navigateTo(viewJump.dataset.viewJump, null, "anim-blur-focus");
+    return;
+  }
+
+  // Hero Start / Resume
+  if (e.target.closest('[data-action="start-study"]')) {
+    navigateTo("unit", "u1", "anim-depth-zoom");
+    return;
+  }
+  if (e.target.closest('[data-action="resume-study"]')) {
+    navigateTo("unit", state.lastUnitId || "u1", "anim-depth-zoom");
+    return;
+  }
+
+  // Toggle Single Paragraph Translation
+  const transBtn = e.target.closest("[data-toggle-trans]");
+  if (transBtn) {
+    const wrap = document.getElementById("trans_" + transBtn.dataset.toggleTrans);
+    if (wrap) {
+      const open = wrap.classList.toggle("open");
+      transBtn.textContent = open ? "🌐 إخفاء الترجمة" : "🌐 ترجمة الفقرة";
+      transBtn.classList.toggle("active-toggle", open);
+    }
+    return;
+  }
+
+  // Toggle Homework Helper
+  const hwBtn = e.target.closest("[data-toggle-hw]");
+  if (hwBtn) {
+    const wrap = document.getElementById("hw_" + hwBtn.dataset.toggleHw);
+    if (wrap) wrap.classList.toggle("open");
+    return;
+  }
+
+  // Toggle ALL Translations in current Unit
+  if (e.target.closest("#toggleAllTransBtn")) {
+    const btn = document.getElementById("toggleAllTransBtn");
+    const wraps = [...document.querySelectorAll(".paragraph-card > .translation-wrapper")];
+    const anyClosed = wraps.some(w => !w.classList.contains("open"));
+    wraps.forEach(w => w.classList.toggle("open", anyClosed));
+    document.querySelectorAll("[data-toggle-trans]").forEach(b => {
+      b.textContent = anyClosed ? "🌐 إخفاء الترجمة" : "🌐 ترجمة الفقرة";
+      b.classList.toggle("active-toggle", anyClosed);
+    });
+    btn.textContent = anyClosed ? "🌐 إخفاء كل الترجمات" : "🌐 إظهار كل الترجمات";
+    return;
+  }
+
+  // Copy Original Paragraph or Translation
+  const copyPara = e.target.closest("[data-copy-para]");
+  if (copyPara) {
+    const p = findParagraph(copyPara.dataset.copyPara);
+    if (p) copyTextSafe(p.enBlocks.join("\n"), copyPara);
+    return;
+  }
+  const copyAr = e.target.closest("[data-copy-ar]");
+  if (copyAr) {
+    const p = findParagraph(copyAr.dataset.copyAr);
+    if (p) copyTextSafe(p.ar, copyAr);
+    return;
+  }
+
+  // Per-Paragraph MCQ Controls
+  const mcqBtn = e.target.closest("[data-toggle-mcq]");
+  if (mcqBtn) { toggleParagraphMcq(mcqBtn.dataset.toggleMcq); return; }
+
+  const paraAns = e.target.closest("[data-para-ans]");
+  if (paraAns) { handleParagraphAnswer(paraAns.dataset.paraAns, Number(paraAns.dataset.opt), paraAns); return; }
+
+  const nextPara = e.target.closest("[data-next-para]");
+  if (nextPara) {
+    const st = paragraphQuizState[nextPara.dataset.nextPara];
+    if (st) { st.index++; st.answered = false; st.chosen = null; renderParagraphMcqStep(nextPara.dataset.nextPara); }
+    return;
+  }
+
+  const retryPara = e.target.closest("[data-retry-para]");
+  if (retryPara) {
+    paragraphQuizState[retryPara.dataset.retryPara] = { index: 0, correct: 0, wrong: 0, answered: false, chosen: null };
+    renderParagraphMcqStep(retryPara.dataset.retryPara);
+    return;
+  }
+
+  const closeParaMcq = e.target.closest("[data-close-para-mcq]");
+  if (closeParaMcq) {
+    const m = document.getElementById("mcq_mount_" + closeParaMcq.dataset.closeParaMcq);
+    if (m) m.innerHTML = "";
+    return;
+  }
+
+  // Unit Complete Toggle & Unit Quiz Launch
+  if (e.target.closest("#markUnitDoneBtn")) {
+    const idx = state.completedUnits.indexOf(currentUnitId);
+    if (idx === -1) {
+      state.completedUnits.push(currentUnitId);
+      showToast("أحسنت! تم تحديد الوحدة كمكتملة ✓");
+      const r = e.target.getBoundingClientRect();
+      spawnParticles(r.left + r.width / 2, r.top + r.height / 2, 16);
+    } else {
+      state.completedUnits.splice(idx, 1);
+      showToast("تم إلغاء تحديد الوحدة");
+    }
+    saveState();
+    updateSidebarAndBadges();
+    renderUnit(document.getElementById("viewContainer"), currentUnitId);
+    initScrollReveal();
+    return;
+  }
+
+  if (e.target.closest("#unitQuizLaunchBtn")) {
+    const mount = document.getElementById("unitQuizMount");
+    if (mount) {
+      renderExamView(mount, currentUnitId);
+      mount.scrollIntoView({ behavior: "smooth" });
+    }
+    return;
+  }
+
+  // Exam / Unit Quiz Answers
+  const examOpt = e.target.closest("[data-exam-opt]");
+  if (examOpt && activeExamState && !activeExamState.answered) {
+    const optIdx = Number(examOpt.dataset.examOpt);
+    const q = activeExamState.questions[activeExamState.index];
+    activeExamState.answered = true;
+    activeExamState.chosen = optIdx;
+    if (optIdx === q.ans) {
+      activeExamState.correct++;
+      removeMistake(q.id);
+      const r = examOpt.getBoundingClientRect();
+      spawnParticles(r.left + r.width / 2, r.top + r.height / 2, 10);
+    } else {
+      activeExamState.wrongItems.push(q);
+      recordMistake(q, q.unitId);
+    }
+    const target = activeExamState.scope === "all" ? document.getElementById("viewContainer") : document.getElementById("unitQuizMount");
+    renderExamStep(target);
+    return;
+  }
+
+  if (e.target.closest("#nextExamQBtn") && activeExamState) {
+    activeExamState.index++;
+    activeExamState.answered = false;
+    activeExamState.chosen = null;
+    const target = activeExamState.scope === "all" ? document.getElementById("viewContainer") : document.getElementById("unitQuizMount");
+    renderExamStep(target);
+    return;
+  }
+
+  if (e.target.closest("#retryExamBtn") && activeExamState) {
+    const target = activeExamState.scope === "all" ? document.getElementById("viewContainer") : document.getElementById("unitQuizMount");
+    renderExamView(target, activeExamState.scope);
+    return;
+  }
+
+  // Favorite Toggle (Glossary & Popover)
+  const favBtn = e.target.closest("[data-toggle-fav]");
+  if (favBtn) {
+    toggleFavorite(favBtn.dataset.toggleFav);
+    if (currentView === "glossary" || currentView === "favorites") {
+      renderGlossary(document.getElementById("viewContainer"), currentView === "favorites");
+    }
+    return;
+  }
+
+  // 3D Flip Flashcards
+  const flipCard = e.target.closest(".flip-card");
+  if (flipCard) { flipCard.classList.toggle("flipped"); return; }
+
+  // Mistakes Clearing
+  const clearOne = e.target.closest("[data-clear-one-mistake]");
+  if (clearOne) {
+    removeMistake(clearOne.dataset.clearOneMistake);
+    renderMistakes(document.getElementById("viewContainer"));
+    showToast("تمت إزالة السؤال من قائمة الأخطاء ✓");
+    return;
+  }
+  if (e.target.closest("#clearMistakesBtn")) {
+    state.mistakes = [];
+    saveState();
+    updateSidebarAndBadges();
+    renderMistakes(document.getElementById("viewContainer"));
+    showToast("تم مسح قائمة الأخطاء");
+    return;
+  }
+
+  // Search Result Jump
+  const sr = e.target.closest(".search-result-item");
+  if (sr) {
+    closeModal("searchModal");
+    navigateTo("unit", sr.dataset.jumpUnit, "anim-blur-focus");
+    setTimeout(() => {
+      const el = document.getElementById("para_" + sr.dataset.jumpPara);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("search-hit");
+        setTimeout(() => el.classList.remove("search-hit"), 2500);
+      }
+    }, 180);
+    return;
+  }
+
+  // Modal Close
+  const closeMod = e.target.closest("[data-close-modal]");
+  if (closeMod) { closeModal(closeMod.dataset.closeModal); return; }
+  if (e.target.classList.contains("modal-backdrop")) { e.target.classList.remove("open"); }
+});
+
+function toggleFavorite(key) {
+  const idx = state.favorites.indexOf(key);
+  if (idx === -1) { state.favorites.push(key); showToast("تم حفظ المصطلح في المفضلة ★"); }
+  else { state.favorites.splice(idx, 1); showToast("تمت إزالة المصطلح من المفضلة"); }
+  saveState();
+  updateSidebarAndBadges();
+}
+
+// Static Controls
+document.getElementById("popFavBtn").addEventListener("click", () => {
+  if (!activePopoverWord) return;
+  toggleFavorite(activePopoverWord);
+  const isFav = state.favorites.includes(activePopoverWord);
+  document.getElementById("popFavBtn").textContent = isFav ? "★ محفوظ في المفضلة" : "⭐ حفظ في المفضلة";
+});
+document.getElementById("closePopoverBtn").addEventListener("click", hidePopover);
+document.getElementById("brandHomeBtn").addEventListener("click", () => navigateTo("home", null, "anim-depth-zoom"));
+
+document.getElementById("mobileMenuBtn").addEventListener("click", () => {
+  const sb = document.getElementById("sidebar");
+  const open = sb.classList.toggle("mobile-open");
+  document.getElementById("sidebarBackdrop").classList.toggle("mobile-open", open);
+  document.getElementById("mobileMenuBtn").classList.toggle("open", open);
+});
+document.getElementById("sidebarBackdrop").addEventListener("click", closeMobileSidebar);
+
+document.getElementById("toggleThemeBtn").addEventListener("click", () => {
+  state.theme = state.theme === "light" ? "dark" : "light";
+  saveState();
+  applyPreferences();
+  showToast(state.theme === "dark" ? "تم تفعيل الوضع الليلي 🌙" : "تم تفعيل الوضع النهاري ☀️");
+});
+
+document.getElementById("toggleFocusBtn").addEventListener("click", (e) => {
+  const active = document.body.classList.toggle("focus-mode");
+  e.currentTarget.classList.toggle("active-toggle", active);
+  showToast(active ? "تم تفعيل وضع التركيز" : "تم إيقاف وضع التركيز");
+});
+
+document.getElementById("toggleReadingBtn").addEventListener("click", (e) => {
+  const active = document.body.classList.toggle("reading-mode");
+  e.currentTarget.classList.toggle("active-toggle", active);
+  showToast(active ? "تم تفعيل وضع القراءة الهادئ" : "تم إيقاف وضع القراءة");
+});
+
+document.getElementById("openSearchBtn").addEventListener("click", () => {
+  openModal("searchModal");
+  const inp = document.getElementById("globalSearchInput");
+  setTimeout(() => inp.focus(), 80);
+  runGlobalSearch(inp.value);
+});
+document.getElementById("globalSearchInput").addEventListener("input", e => runGlobalSearch(e.target.value));
+
+document.getElementById("openSettingsBtn").addEventListener("click", () => openModal("settingsModal"));
+document.getElementById("fontIncBtn").addEventListener("click", () => {
+  state.fontScale = Math.min(1.25, +(state.fontScale + 0.08).toFixed(2));
+  saveState(); applyPreferences();
+});
+document.getElementById("fontDecBtn").addEventListener("click", () => {
+  state.fontScale = Math.max(0.84, +(state.fontScale - 0.08).toFixed(2));
+  saveState(); applyPreferences();
+});
+document.getElementById("fontResetBtn").addEventListener("click", () => {
+  state.fontScale = 1; saveState(); applyPreferences();
+});
+document.getElementById("toggleMotionBtn").addEventListener("click", () => {
+  state.reducedMotion = !state.reducedMotion;
+  saveState(); applyPreferences();
+});
+document.getElementById("replayIntroBtn").addEventListener("click", () => {
+  closeModal("settingsModal");
+  document.getElementById("introOverlay").classList.remove("hidden");
+});
+document.getElementById("openResetConfirmBtn").addEventListener("click", () => {
+  closeModal("settingsModal");
+  openModal("resetModal");
+});
+document.getElementById("confirmResetBtn").addEventListener("click", () => {
+  state = { ...DEFAULT_STATE };
+  saveState();
+  applyPreferences();
+  closeModal("resetModal");
+  navigateTo("home", "u1", "anim-depth-zoom");
+  showToast("تمت إعادة ضبط جميع بيانات التقدم");
+});
+
+// Intro dismiss
+document.getElementById("enterPlatformBtn").addEventListener("click", () => {
+  document.getElementById("introOverlay").classList.add("hidden");
+  try { sessionStorage.setItem("intro_seen_l1", "1"); } catch (e) {}
+});
+
+// Scroll Progress Bar
+window.addEventListener("scroll", () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? Math.min(100, (window.scrollY / h) * 100) : 0;
+  document.getElementById("scrollProgress").style.width = pct + "%";
+}, { passive: true });
+
+// Keyboard Accessibility (Esc closes modals/popover)
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    hidePopover();
+    document.querySelectorAll(".modal-backdrop.open").forEach(m => m.classList.remove("open"));
+  }
+});
+
+/* =========================================================================
+   15. INIT
+   ========================================================================= */
+applyPreferences();
+try {
+  if (sessionStorage.getItem("intro_seen_l1") === "1") {
+    document.getElementById("introOverlay").classList.add("hidden");
+  }
+} catch (e) {}
+updateSidebarAndBadges();
+navigateTo("home", currentUnitId, "anim-depth-zoom");
+</script>
+</body>
+</html>
